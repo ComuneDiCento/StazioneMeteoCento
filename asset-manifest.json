@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/StazioneMeteoCento/static/css/main.d5325f42.css",
-    "main.js": "/StazioneMeteoCento/static/js/main.d8deb2a1.js",
+    "main.js": "/StazioneMeteoCento/static/js/main.462110db.js",
     "static/js/453.0f7c1453.chunk.js": "/StazioneMeteoCento/static/js/453.0f7c1453.chunk.js",
     "index.html": "/StazioneMeteoCento/index.html",
     "main.d5325f42.css.map": "/StazioneMeteoCento/static/css/main.d5325f42.css.map",
-    "main.d8deb2a1.js.map": "/StazioneMeteoCento/static/js/main.d8deb2a1.js.map",
+    "main.462110db.js.map": "/StazioneMeteoCento/static/js/main.462110db.js.map",
     "453.0f7c1453.chunk.js.map": "/StazioneMeteoCento/static/js/453.0f7c1453.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.d5325f42.css",
-    "static/js/main.d8deb2a1.js"
+    "static/js/main.462110db.js"
   ]
 }
