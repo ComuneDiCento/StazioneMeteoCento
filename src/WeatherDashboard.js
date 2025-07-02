@@ -1,10 +1,4 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import {
-  Grid, Typography, Select, MenuItem,
-  FormControl, InputLabel, Box, Container, Alert
-} from '@mui/material';
-import Plot from 'react-plotly.js';
-import RefreshIcon from '@mui/icons-material/Refresh';
 import ThermostatIcon from '@mui/icons-material/Thermostat';
 import OpacityIcon from '@mui/icons-material/Opacity';
 import CompressIcon from '@mui/icons-material/Compress';
@@ -14,7 +8,7 @@ import WaterDropIcon from '@mui/icons-material/WaterDrop';
 import WeatherCardWrapper from './components/cards/WeatherCardWrapper';
 import {
   fetchHistoricalData,
-  toRomeDate
+  
 } from './utils/dataUtils';
 
 const WEATHER_STATIONS = {
