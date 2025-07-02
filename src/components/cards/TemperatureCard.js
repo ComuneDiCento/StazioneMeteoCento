@@ -118,7 +118,7 @@ const TemperatureCard = ({ param, data, lastUpd, fmtTime }) => {
               },
               legend: { orientation: 'h' }
             }}
-            config={{ displayModeBar: false, responsive: true }}
+            config={{ displayModeBar: false, responsive: true, staticPlot: true }}
             style={{ width: '100%' }}
           />
         )}

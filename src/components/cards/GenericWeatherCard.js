@@ -129,7 +129,7 @@ const GenericWeatherCard = ({ param, data, fmtTime, lastUpd }) => {
               },
               legend: { orientation: 'h' }
             }}
-            config={{ displayModeBar: false, responsive: true }}
+            config={{ displayModeBar: false, responsive: true, staticPlot: true }}
             style={{ width: '100%' }}
           />
         )}

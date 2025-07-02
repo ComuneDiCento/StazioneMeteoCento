@@ -141,7 +141,7 @@ const WindCard = ({ param, data, fmtTime, lastUpd }) => {
                 y: 1.15
               }
             }}
-            config={{ displayModeBar: false, responsive: true }}
+            config={{ displayModeBar: false, responsive: true, staticPlot: true }}
             style={{ width: '100%' }}
           />
         )}
@@ -165,7 +165,7 @@ const WindCard = ({ param, data, fmtTime, lastUpd }) => {
               },
               legend: { orientation: 'h' }
             }}
-            config={{ displayModeBar: false, responsive: true }}
+            config={{ displayModeBar: false, responsive: true, staticPlot: true}}
             style={{ width: '100%' }}
           />
         )}
@@ -223,7 +223,7 @@ const WindCard = ({ param, data, fmtTime, lastUpd }) => {
             margin: { t: 60, b: 20, l: 20, r: 140 },
             height: 400
           }}
-          config={{ displayModeBar: false, responsive: true }}
+          config={{ displayModeBar: false, responsive: true, staticPlot: true }}
           style={{ width: '100%' }}
         />
       </div>
