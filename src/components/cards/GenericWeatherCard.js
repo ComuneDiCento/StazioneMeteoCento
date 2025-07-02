@@ -1,5 +1,4 @@
 import React from 'react';
-import { Card, CardContent, Typography, Box, Grid } from '@mui/material';
 import Plot from 'react-plotly.js';
 import { toRomeDate } from '../../utils/dataUtils';
 
@@ -58,21 +57,20 @@ const GenericWeatherCard = ({ param, data, fmtTime, lastUpd }) => {
   }));
 
   return (
-    <Card sx={{ '&:hover': { boxShadow: 6 } }}>
-      <CardContent>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
-          <Box sx={{ color: param.color }}>{param.icon}</Box>
-          <Typography variant="h6">{param.label}</Typography>
-        </Box>
+    <div className="card shadow-sm hover-shadow mb-4">
+      <div className="card-body">
+        <div className="d-flex align-items-center gap-2 mb-3">
+          <div style={{ color: param.color }}>{param.icon}</div>
+          <h5 className="card-title mb-0">{param.label}</h5>
+        </div>
 
-        <Grid container spacing={2} mb={2}>
+        <div className="row mb-3">
           {values.map((v, i) => (
             <React.Fragment key={i}>
-              {/* Valore attuale */}
-              <Grid item xs={12} sm={4}>
-                <Typography variant="h5">{v.current.value.toFixed(1)} {v.unit}</Typography>
-                <Typography variant="body2" color="text.secondary">{v.label}</Typography>
-                <Typography variant="caption" display="block" color="text.secondary">
+              <div className="col-sm-4 mb-3">
+                <h5>{v.current.value.toFixed(1)} {v.unit}</h5>
+                <small className="text-secondary d-block">{v.label}</small>
+                <small className="text-muted">
                   {(toRomeDate(v.current.time) || lastUpd)?.toLocaleString('it-IT', {
                     timeZone: 'Europe/Rome',
                     day: '2-digit',
@@ -80,14 +78,13 @@ const GenericWeatherCard = ({ param, data, fmtTime, lastUpd }) => {
                     hour: '2-digit',
                     minute: '2-digit'
                   })}
-                </Typography>
-              </Grid>
+                </small>
+              </div>
 
-              {/* Valore massimo */}
-              <Grid item xs={12} sm={4}>
-                <Typography variant="h5">{v.max?.value.toFixed(1)} {v.unit}</Typography>
-                <Typography variant="body2" color="text.secondary">Massima</Typography>
-                <Typography variant="caption" display="block" color="text.secondary">
+              <div className="col-sm-4 mb-3">
+                <h5>{v.max?.value.toFixed(1)} {v.unit}</h5>
+                <small className="text-secondary d-block">Massima</small>
+                <small className="text-muted">
                   {(toRomeDate(v.max?.time) || lastUpd)?.toLocaleString('it-IT', {
                     timeZone: 'Europe/Rome',
                     day: '2-digit',
@@ -95,14 +92,13 @@ const GenericWeatherCard = ({ param, data, fmtTime, lastUpd }) => {
                     hour: '2-digit',
                     minute: '2-digit'
                   })}
-                </Typography>
-              </Grid>
+                </small>
+              </div>
 
-              {/* Valore minimo */}
-              <Grid item xs={12} sm={4}>
-                <Typography variant="h5">{v.min?.value.toFixed(1)} {v.unit}</Typography>
-                <Typography variant="body2" color="text.secondary">Minima</Typography>
-                <Typography variant="caption" display="block" color="text.secondary">
+              <div className="col-sm-4 mb-3">
+                <h5>{v.min?.value.toFixed(1)} {v.unit}</h5>
+                <small className="text-secondary d-block">Minima</small>
+                <small className="text-muted">
                   {(toRomeDate(v.min?.time) || lastUpd)?.toLocaleString('it-IT', {
                     timeZone: 'Europe/Rome',
                     day: '2-digit',
@@ -110,11 +106,11 @@ const GenericWeatherCard = ({ param, data, fmtTime, lastUpd }) => {
                     hour: '2-digit',
                     minute: '2-digit'
                   })}
-                </Typography>
-              </Grid>
+                </small>
+              </div>
             </React.Fragment>
           ))}
-        </Grid>
+        </div>
 
         {traces.length > 0 && (
           <Plot
@@ -137,8 +133,8 @@ const GenericWeatherCard = ({ param, data, fmtTime, lastUpd }) => {
             style={{ width: '100%' }}
           />
         )}
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 };
 

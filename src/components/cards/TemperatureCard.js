@@ -1,5 +1,4 @@
 import React from 'react';
-import { Card, CardContent, Typography, Box, Grid } from '@mui/material';
 import ThermostatIcon from '@mui/icons-material/Thermostat';
 import Plot from 'react-plotly.js';
 import { toRomeDate } from '../../utils/dataUtils';
@@ -8,8 +7,6 @@ const TemperatureCard = ({ param, data, lastUpd, fmtTime }) => {
   const baseTemp = data?.find(h => h.measure.key === 'TEMPERATURA');
   const maxTemp = data?.find(h => h.measure.key === 'MAX');
   const minTemp = data?.find(h => h.measure.key === 'MIN');
-
-  console.log(data);
 
   let vals = [];
 
@@ -74,19 +71,23 @@ const TemperatureCard = ({ param, data, lastUpd, fmtTime }) => {
   ].filter(Boolean);
 
   return (
-    <Card sx={{ '&:hover': { boxShadow: 6 } }}>
-      <CardContent>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
-          <Box sx={{ color: param.color }}><ThermostatIcon /></Box>
-          <Typography variant="h6">{param.label}</Typography>
-        </Box>
+    <div className="card shadow-sm hover-shadow mb-4">
+      <div className="card-body">
+        {/* Header icona + label */}
+        <div className="d-flex align-items-center gap-2 mb-3">
+          <div style={{ color: param.color }}>
+            <ThermostatIcon />
+          </div>
+          <h5 className="card-title mb-0">{param.label}</h5>
+        </div>
 
-        <Grid container spacing={2} mb={2}>
+        {/* Valori temperatura */}
+        <div className="row mb-3">
           {vals.map((d, i) => (
-            <Grid key={i} item xs={12} sm={4}>
-              <Typography variant="h5">{d.value.toFixed(1)} {d.unit}</Typography>
-              <Typography variant="body2" color="text.secondary">{d.label}</Typography>
-              <Typography variant="caption" display="block" color="text.secondary">
+            <div className="col-sm-4 mb-3" key={i}>
+              <h5>{d.value.toFixed(1)} {d.unit}</h5>
+              <small className="text-secondary d-block">{d.label}</small>
+              <small className="text-muted d-block">
                 {(toRomeDate(d.time) || lastUpd)?.toLocaleString('it-IT', {
                   timeZone: 'Europe/Rome',
                   day: '2-digit',
@@ -94,12 +95,12 @@ const TemperatureCard = ({ param, data, lastUpd, fmtTime }) => {
                   hour: '2-digit',
                   minute: '2-digit'
                 })}
-              </Typography>
-
-            </Grid>
+              </small>
+            </div>
           ))}
-        </Grid>
+        </div>
 
+        {/* Grafico */}
         {traces.length > 0 && (
           <Plot
             data={traces}
@@ -121,8 +122,8 @@ const TemperatureCard = ({ param, data, lastUpd, fmtTime }) => {
             style={{ width: '100%' }}
           />
         )}
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 };
 

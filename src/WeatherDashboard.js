@@ -156,64 +156,64 @@ const WeatherDashboard = () => {
   };
 
   return (
-    <Container maxWidth="xl" sx={{ py: 4 }}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
-        <Typography variant="h1">
-          Stazione Meteo Cento  <small>(Ultime {historyHours}h)</small>
-        </Typography>
+    <div className="it-page-section">
+      <div className="container">
+<div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4">
+  <h1 className="it-heading-xl mb-3 mb-md-0">
+    Stazione Meteo Cento (Ultime {historyHours}h)
+  </h1>
 
-        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-          <FormControl sx={{ minWidth: 120 }}>
-            <InputLabel id="interval-label">Agg.</InputLabel>
-            <Select
-              labelId="interval-label"
-              value={intervalMs}
-              label="Agg."
-              onChange={e => setIntervalMs(e.target.value)}
-            >
-              <MenuItem value={30000}>30s</MenuItem>
-              <MenuItem value={60000}>1m</MenuItem>
-              <MenuItem value={300000}>5m</MenuItem>
-              <MenuItem value={600000}>10m</MenuItem>
-            </Select>
-          </FormControl>
+  <div className="d-flex flex-column flex-sm-row gap-3 align-items-start align-items-sm-end">
+    <div className="d-flex flex-column">
+      <label htmlFor="interval-select">Intervallo</label>
+      <select
+        id="interval-select"
+        className="form-select"
+        value={intervalMs}
+        onChange={e => setIntervalMs(Number(e.target.value))}
+      >
+        <option value={30000}>30s</option>
+        <option value={60000}>1m</option>
+        <option value={300000}>5m</option>
+        <option value={600000}>10m</option>
+      </select>
+    </div>
 
-          <FormControl sx={{ minWidth: 120 }}>
-            <InputLabel id="history-label">Storico</InputLabel>
-            <Select
-              labelId="history-label"
-              value={historyHours}
-              label="Storico"
-              onChange={e => setHistoryHours(e.target.value)}
-            >
-              <MenuItem value={24}>24h</MenuItem>
-              <MenuItem value={48}>48h</MenuItem>
-              <MenuItem value={72}>72h</MenuItem>
-              <MenuItem value={96}>96h</MenuItem>
-            </Select>
-          </FormControl>
+    <div className="d-flex flex-column">
+      <label htmlFor="history-select">Storico</label>
+      <select
+        id="history-select"
+        className="form-select"
+        value={historyHours}
+        onChange={e => setHistoryHours(Number(e.target.value))}
+      >
+        <option value={24}>24h</option>
+        <option value={48}>48h</option>
+        <option value={72}>72h</option>
+        <option value={96}>96h</option>
+      </select>
+    </div>
 
-          {lastUpd && (
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <RefreshIcon fontSize="small" />
-              <Typography variant="body2" color="text.secondary">
-                {fmtTime(lastUpd)}
-              </Typography>
-            </Box>
-          )}
-        </Box>
+    {lastUpd && (
+      <div className="d-flex align-items-center">
+        <span className="text-muted">
+          Ultimo aggiornamento: {fmtTime(lastUpd)}
+        </span>
+      </div>
+    )}
+  </div>
+</div>
 
-      </Box>
-      <Typography variant="p">
-        Dati provenienti dalla stazione meteo installata nel <a href="https://comune.cento.fe.it">Comune di Cento</a> (presso la sede della Polizia Locale) da <a href="https://lepida.it">Lepida S.c.p.A.</a> nell'ambito del progetto "<a href="https://retepaiot.it">RetePAIOT</a>" della <a href="https://www.regione.emilia-romagna.it/">Regione Emilia-Romagna</a>
-      </Typography>
-      {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+        <p>
+          Dati provenienti dalla stazione meteo installata nel <a href="https://comune.cento.fe.it">Comune di Cento</a> (presso la sede della Polizia Locale) da <a href="https://lepida.it">Lepida S.c.p.A.</a> nell'ambito del progetto <a href="https://retepaiot.it">RetePAIOT</a> della <a href="https://www.regione.emilia-romagna.it/">Regione Emilia-Romagna</a>.
+        </p>
 
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={6}>
-          <Grid container spacing={3}>
+        {error && <div className="alert alert-danger">{error}</div>}
+
+        <div className="row">
+          <div className="col-md-6">
             {leftParams.map(p => (
-              <Grid item xs={12} key={p.label}>
+              <div className="mb-4" key={p.label}>
                 <WeatherCardWrapper
                   param={p}
                   data={histMap[p.label]}
@@ -221,14 +221,12 @@ const WeatherDashboard = () => {
                   fmtTime={fmtTime}
                   formatChartData={formatChartData}
                 />
-              </Grid>
+              </div>
             ))}
-          </Grid>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <Grid container spacing={3}>
+          </div>
+          <div className="col-md-6">
             {rightParams.map(p => (
-              <Grid item xs={12} key={p.label}>
+              <div className="mb-4" key={p.label}>
                 <WeatherCardWrapper
                   param={p}
                   data={histMap[p.label]}
@@ -236,12 +234,12 @@ const WeatherDashboard = () => {
                   fmtTime={fmtTime}
                   formatChartData={formatChartData}
                 />
-              </Grid>
+              </div>
             ))}
-          </Grid>
-        </Grid>
-      </Grid>
-    </Container>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

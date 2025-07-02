@@ -1,5 +1,4 @@
 import React from 'react';
-import { Card, CardContent, Typography, Box } from '@mui/material';
 import Plot from 'react-plotly.js';
 import { toRomeDate } from '../../utils/dataUtils';
 
@@ -92,20 +91,21 @@ const WindCard = ({ param, data, fmtTime, lastUpd }) => {
   const speed = (entryMax?.data ?? []).map(d => parseFloat(d.value));
 
   return (
-    <Card sx={{ '&:hover': { boxShadow: 6 } }}>
-      <CardContent>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
-          <Box sx={{ color: param.color }}>{param.icon}</Box>
-          <Typography variant="h6">Vento</Typography>
-        </Box>
+    <div className="card shadow-sm hover-shadow mb-4">
+      <div className="card-body">
+        {/* Intestazione */}
+        <div className="d-flex align-items-center gap-2 mb-3">
+          <div style={{ color: param.color }}>{param.icon}</div>
+          <h5 className="card-title mb-0">Vento</h5>
+        </div>
 
         {/* Valori istantanei */}
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mb: 2 }}>
+        <div className="d-flex flex-wrap gap-4 mb-3">
           {items.map((d, i) => (
-            <Box key={i}>
-              <Typography variant="h5">{d.formatted}</Typography>
-              <Typography variant="body2" color="text.secondary">{d.label}</Typography>
-              <Typography variant="caption" display="block" color="text.secondary">
+            <div key={i}>
+              <h5>{d.formatted}</h5>
+              <small className="text-secondary d-block">{d.label}</small>
+              <small className="text-muted d-block">
                 {(toRomeDate(d.time) || lastUpd)?.toLocaleString('it-IT', {
                   timeZone: 'Europe/Rome',
                   day: '2-digit',
@@ -113,10 +113,10 @@ const WindCard = ({ param, data, fmtTime, lastUpd }) => {
                   hour: '2-digit',
                   minute: '2-digit'
                 })}
-              </Typography>
-            </Box>
+              </small>
+            </div>
           ))}
-        </Box>
+        </div>
 
         {/* Grafico velocità */}
         {plotVelocity.length > 0 && (
@@ -174,10 +174,10 @@ const WindCard = ({ param, data, fmtTime, lastUpd }) => {
         <Plot
           data={(() => {
             const speedRanges = [
-              { min: 0.0, max: 0.2, color: '#00e676', label: 'Bf 0 (0.0 – 0.2 m/s)' },   // verde chiaro
+              { min: 0.0, max: 0.2, color: '#00e676', label: 'Bf 0 (0.0 – 0.2 m/s)' },
               { min: 0.3, max: 1.5, color: '#66eb6e', label: 'Bf 1 (0.3 – 1.5 m/s)' },
               { min: 1.6, max: 3.3, color: '#c6ea4b', label: 'Bf 2 (1.6 – 3.3 m/s)' },
-              { min: 3.4, max: 5.4, color: '#fdd835', label: 'Bf 3 (3.4 – 5.4 m/s)' },   // giallo
+              { min: 3.4, max: 5.4, color: '#fdd835', label: 'Bf 3 (3.4 – 5.4 m/s)' },
               { min: 5.5, max: 7.9, color: '#ffc107', label: 'Bf 4 (5.5 – 7.9 m/s)' },
               { min: 8.0, max: 10.7, color: '#ff9800', label: 'Bf 5 (8.0 – 10.7 m/s)' },
               { min: 10.8, max: 13.8, color: '#ff7043', label: 'Bf 6 (10.8 – 13.8 m/s)' },
@@ -186,10 +186,8 @@ const WindCard = ({ param, data, fmtTime, lastUpd }) => {
               { min: 20.8, max: 24.4, color: '#e53935', label: 'Bf 9 (20.8 – 24.4 m/s)' },
               { min: 24.5, max: 28.4, color: '#d32f2f', label: 'Bf 10 (24.5 – 28.4 m/s)' },
               { min: 28.5, max: 32.6, color: '#c62828', label: 'Bf 11 (28.5 – 32.6 m/s)' },
-              { min: 32.7, max: Infinity, color: '#b71c1c', label: 'Bf 12 (> 32.6 m/s)' } // rosso scuro
+              { min: 32.7, max: Infinity, color: '#b71c1c', label: 'Bf 12 (> 32.6 m/s)' }
             ];
-
-
 
             const counts = speedRanges.map(() => Array(8).fill(0));
             for (let i = 0; i < direction.length; i++) {
@@ -221,15 +219,15 @@ const WindCard = ({ param, data, fmtTime, lastUpd }) => {
               radialaxis: { ticksuffix: '%', angle: 90, showline: false }
             },
             showlegend: true,
-            legend: { orientation: 'v', x: 0.85, y: 0.5 },
+            legend: { orientation: 'v', x: 0.95, y: 0.5 },
             margin: { t: 60, b: 20, l: 20, r: 140 },
             height: 400
           }}
           config={{ displayModeBar: false, responsive: true }}
           style={{ width: '100%' }}
         />
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 };
 
