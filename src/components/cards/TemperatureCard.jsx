@@ -1,6 +1,6 @@
 import React from 'react';
-import ThermostatIcon from '@mui/icons-material/Thermostat';
 import Plot from 'react-plotly.js';
+import { Row, Col } from 'design-react-kit';
 import { toRomeDate } from '../../utils/dataUtils';
 
 const TemperatureCard = ({ param, data, lastUpd, fmtTime }) => {
@@ -8,9 +8,8 @@ const TemperatureCard = ({ param, data, lastUpd, fmtTime }) => {
   const maxTemp = data?.find(h => h.measure.key === 'MAX');
   const minTemp = data?.find(h => h.measure.key === 'MIN');
 
-  let vals = [];
+  const vals = [];
 
-  // Media (Attuale)
   if (baseTemp?.data?.length) {
     const last = baseTemp.data[baseTemp.data.length - 1];
     vals.push({
@@ -21,9 +20,8 @@ const TemperatureCard = ({ param, data, lastUpd, fmtTime }) => {
     });
   }
 
-  // Massima
   if (maxTemp?.data?.length) {
-    const maxValues = maxTemp.data.map(d => parseFloat(d.value)).filter(v => !isNaN(v));
+    const maxValues = maxTemp.data.map(d => parseFloat(d.value)).filter(Number.isFinite);
     const max = Math.max(...maxValues);
     const index = maxValues.indexOf(max);
     const time = maxTemp.data[index]?.timestamp || maxTemp.data[index]?.timedate;
@@ -35,9 +33,8 @@ const TemperatureCard = ({ param, data, lastUpd, fmtTime }) => {
     });
   }
 
-  // Minima
   if (minTemp?.data?.length) {
-    const minValues = minTemp.data.map(d => parseFloat(d.value)).filter(v => !isNaN(v));
+    const minValues = minTemp.data.map(d => parseFloat(d.value)).filter(Number.isFinite);
     const min = Math.min(...minValues);
     const index = minValues.indexOf(min);
     const time = minTemp.data[index]?.timestamp || minTemp.data[index]?.timedate;
@@ -49,14 +46,11 @@ const TemperatureCard = ({ param, data, lastUpd, fmtTime }) => {
     });
   }
 
-  // Format per il grafico
   const formatPlotlyData = (dataset, label, color) => {
     if (!dataset) return null;
-    const timestamps = dataset.data.map(d => new Date(d.timestamp || d.timedate));
-    const values = dataset.data.map(d => parseFloat(d.value));
     return {
-      x: timestamps,
-      y: values,
+      x: dataset.data.map(d => new Date(d.timestamp || d.timedate)),
+      y: dataset.data.map(d => parseFloat(d.value)),
       type: 'scatter',
       mode: 'lines',
       name: label,
@@ -71,20 +65,18 @@ const TemperatureCard = ({ param, data, lastUpd, fmtTime }) => {
   ].filter(Boolean);
 
   return (
-    <div className="card shadow-sm hover-shadow mb-4">
+    <div className="card shadow-sm mb-4">
       <div className="card-body">
-        {/* Header icona + label */}
         <div className="d-flex align-items-center gap-2 mb-3">
           <div style={{ color: param.color }}>
-            <ThermostatIcon />
+            <i className="bi bi-thermometer-half"></i>
           </div>
           <h5 className="card-title mb-0">{param.label}</h5>
         </div>
 
-        {/* Valori temperatura */}
-        <div className="row mb-3">
+        <Row className="mb-3">
           {vals.map((d, i) => (
-            <div className="col-sm-4 mb-3" key={i}>
+            <Col sm={4} className="mb-3" key={i}>
               <h5>{d.value.toFixed(1)} {d.unit}</h5>
               <small className="text-secondary d-block">{d.label}</small>
               <small className="text-muted d-block">
@@ -96,11 +88,10 @@ const TemperatureCard = ({ param, data, lastUpd, fmtTime }) => {
                   minute: '2-digit'
                 })}
               </small>
-            </div>
+            </Col>
           ))}
-        </div>
+        </Row>
 
-        {/* Grafico */}
         {traces.length > 0 && (
           <Plot
             data={traces}

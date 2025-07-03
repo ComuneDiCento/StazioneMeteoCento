@@ -1,5 +1,6 @@
 import React from 'react';
 import Plot from 'react-plotly.js';
+import { Row, Col } from 'design-react-kit';
 import { toRomeDate } from '../../utils/dataUtils';
 
 const WIND_DIRECTIONS = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
@@ -12,14 +13,17 @@ const getExtreme = (dataset, type) => {
   }, []);
   if (!finiteVals.length) return null;
 
-  const extremeObj = finiteVals.reduce((extreme, current) => {
-    return (type === 'min' ? current.val < extreme.val : current.val > extreme.val) ? current : extreme;
-  });
+  const extremeObj = finiteVals.reduce((extreme, current) =>
+    (type === 'min' ? current.val < extreme.val : current.val > extreme.val) ? current : extreme
+  );
 
   return { value: extremeObj.val, time: extremeObj.ts };
 };
 
 const WindCard = ({ param, data, fmtTime, lastUpd }) => {
+  console.log('param:', param);
+console.log('data:', data);
+
   const hist = data || [];
 
   const entryMedia = hist.find(h => h.measure.key === 'VELOCITA MEDIA VENTO');
@@ -29,53 +33,27 @@ const WindCard = ({ param, data, fmtTime, lastUpd }) => {
   const entryRaf = hist.find(h => h.measure.key === 'DIREZIONE RAFFICA');
 
   const medLast = entryMedia?.data?.slice(-1)[0];
-  const medVal = medLast ? parseFloat(medLast.value) : null;
-
   const maxExtreme = entryMax ? getExtreme(entryMax, 'max') : null;
   const minExtreme = entryMin ? getExtreme(entryMin, 'min') : null;
-
   const dirLast = entryDir?.data?.slice(-1)[0];
   const rafLast = entryRaf?.data?.slice(-1)[0];
 
   const items = [
-    medLast && {
-      label: 'Media',
-      formatted: `${medVal.toFixed(1)} ${entryMedia.measure.descrizione_unita_misura}`,
-      time: medLast.timestamp || medLast.timedate
-    },
-    maxExtreme && {
-      label: 'Massima (periodo)',
-      formatted: `${maxExtreme.value.toFixed(1)} ${entryMax.measure.descrizione_unita_misura}`,
-      time: maxExtreme.time
-    },
-    minExtreme && {
-      label: 'Minima (periodo)',
-      formatted: `${minExtreme.value.toFixed(1)} ${entryMin.measure.descrizione_unita_misura}`,
-      time: minExtreme.time
-    },
-    dirLast && {
-      label: 'Direzione',
-      formatted: getWindDir(parseFloat(dirLast.value)),
-      time: dirLast.timestamp || dirLast.timedate
-    },
-    rafLast && {
-      label: 'Direzione raffica',
-      formatted: getWindDir(parseFloat(rafLast.value)),
-      time: rafLast.timestamp || rafLast.timedate
-    }
+    medLast && { label: 'Media', formatted: `${parseFloat(medLast.value).toFixed(1)} ${entryMedia.measure.descrizione_unita_misura}`, time: medLast.timestamp || medLast.timedate },
+    maxExtreme && { label: 'Massima (periodo)', formatted: `${maxExtreme.value.toFixed(1)} ${entryMax.measure.descrizione_unita_misura}`, time: maxExtreme.time },
+    minExtreme && { label: 'Minima (periodo)', formatted: `${minExtreme.value.toFixed(1)} ${entryMin.measure.descrizione_unita_misura}`, time: minExtreme.time },
+    dirLast && { label: 'Direzione', formatted: getWindDir(parseFloat(dirLast.value)), time: dirLast.timestamp || dirLast.timedate },
+    rafLast && { label: 'Direzione raffica', formatted: getWindDir(parseFloat(rafLast.value)), time: rafLast.timestamp || rafLast.timedate }
   ].filter(Boolean);
 
-  const buildTrace = (entry, label, color) => {
-    if (!entry?.data?.length) return null;
-    return {
-      x: entry.data.map(d => new Date(d.timestamp || d.timedate)),
-      y: entry.data.map(d => parseFloat(d.value)),
-      type: 'scatter',
-      mode: 'lines',
-      name: label,
-      line: { width: 2, color }
-    };
-  };
+  const buildTrace = (entry, label, color) => entry ? {
+    x: entry.data.map(d => new Date(d.timestamp || d.timedate)),
+    y: entry.data.map(d => parseFloat(d.value)),
+    type: 'scatter',
+    mode: 'lines',
+    name: label,
+    line: { width: 2, color }
+  } : null;
 
   const plotVelocity = [
     buildTrace(entryMedia, 'Media', '#2196F3'),
@@ -91,18 +69,18 @@ const WindCard = ({ param, data, fmtTime, lastUpd }) => {
   const speed = (entryMax?.data ?? []).map(d => parseFloat(d.value));
 
   return (
-    <div className="card shadow-sm hover-shadow mb-4">
+    <div className="card shadow-sm mb-4">
       <div className="card-body">
-        {/* Intestazione */}
         <div className="d-flex align-items-center gap-2 mb-3">
-          <div style={{ color: param.color }}>{param.icon}</div>
-          <h5 className="card-title mb-0">Vento</h5>
+          <div style={{ color: param.color }}>
+            <i className="bi bi-wind"></i>
+          </div>
+          <h5 className="card-title mb-0">{param.label}</h5>
         </div>
 
-        {/* Valori istantanei */}
-        <div className="d-flex flex-wrap gap-4 mb-3">
+        <Row className="mb-3">
           {items.map((d, i) => (
-            <div key={i}>
+            <Col key={i} sm={6} className="mb-3">
               <h5>{d.formatted}</h5>
               <small className="text-secondary d-block">{d.label}</small>
               <small className="text-muted d-block">
@@ -114,63 +92,28 @@ const WindCard = ({ param, data, fmtTime, lastUpd }) => {
                   minute: '2-digit'
                 })}
               </small>
-            </div>
+            </Col>
           ))}
-        </div>
+        </Row>
 
-        {/* Grafico velocità */}
         {plotVelocity.length > 0 && (
           <Plot
             data={plotVelocity}
-            layout={{
-              title: { text: 'Velocità del vento', font: { size: 16 } },
-              height: 200,
-              margin: { t: 30, b: 70, l: 40, r: 10 },
-              xaxis: {
-                title: 'Orario',
-                type: 'date',
-                tickformat: '%d/%m, %H:%M'
-              },
-              yaxis: {
-                title: entryMedia?.measure?.descrizione_unita_misura || 'm/s',
-                autorange: true
-              },
-              legend: {
-                orientation: 'h',
-                x: 0,
-                y: 1.15
-              }
-            }}
+            layout={{ height: 250, margin: { t: 30, r: 10, b: 40, l: 40 }, xaxis: { title: 'Orario', type: 'date', tickformat: '%d/%m, %H:%M' }, yaxis: { title: entryMedia?.measure?.descrizione_unita_misura || 'm/s', autorange: true }, legend: { orientation: 'h' } }}
             config={{ displayModeBar: false, responsive: true, staticPlot: true }}
             style={{ width: '100%' }}
           />
         )}
 
-        {/* Grafico direzione */}
         {plotDirection.length > 0 && (
           <Plot
             data={plotDirection}
-            layout={{
-              title: { text: 'Direzione del vento', font: { size: 16 } },
-              height: 200,
-              margin: { t: 40, b: 40, l: 40, r: 10 },
-              xaxis: {
-                title: 'Orario',
-                type: 'date',
-                tickformat: '%d/%m, %H:%M'
-              },
-              yaxis: {
-                title: 'Gradi',
-                autorange: true
-              },
-              legend: { orientation: 'h' }
-            }}
-            config={{ displayModeBar: false, responsive: true, staticPlot: true}}
+            layout={{ height: 200, margin: { t: 40, b: 40, l: 40, r: 10 }, xaxis: { title: 'Orario', type: 'date', tickformat: '%d/%m, %H:%M' }, yaxis: { title: 'Gradi', autorange: true }, legend: { orientation: 'h' } }}
+            config={{ displayModeBar: false, responsive: true, staticPlot: true }}
             style={{ width: '100%' }}
           />
         )}
 
-        {/* Rosa dei venti */}
         <Plot
           data={(() => {
             const speedRanges = [
@@ -209,14 +152,8 @@ const WindCard = ({ param, data, fmtTime, lastUpd }) => {
           layout={{
             title: { text: 'Rosa dei venti (raffiche)', font: { size: 16 } },
             polar: {
-              angularaxis: {
-                rotation: 90,
-                direction: 'clockwise',
-                tickmode: 'array',
-                tickvals: [0, 45, 90, 135, 180, 225, 270, 315],
-                ticktext: ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW']
-              },
-              radialaxis: { ticksuffix: '%', angle: 90, showline: false }
+              angularaxis: { rotation: 90, direction: 'clockwise', tickmode: 'array', tickvals: [0, 45, 90, 135, 180, 225, 270, 315], ticktext: ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'] },
+              radialaxis: { ticksuffix: '', angle: 90, showline: false }
             },
             showlegend: true,
             legend: { orientation: 'v', x: 0.95, y: 0.5 },

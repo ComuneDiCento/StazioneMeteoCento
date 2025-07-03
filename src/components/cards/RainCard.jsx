@@ -1,6 +1,6 @@
 import React from 'react';
-import WaterDropIcon from '@mui/icons-material/WaterDrop';
 import Plot from 'react-plotly.js';
+import { Row, Col } from 'design-react-kit';
 import { toRomeDate } from '../../utils/dataUtils';
 
 const RainCard = ({ param, data, lastUpd }) => {
@@ -39,10 +39,7 @@ const RainCard = ({ param, data, lastUpd }) => {
   if (cumulata) {
     traces.push({
       x: cumulata.data.map(d => new Date(d.timestamp || d.timedate)),
-      y: cumulata.data.map((d, i) => {
-        const first = parseFloat(cumulata.data[0].value);
-        return parseFloat(d.value) - first;
-      }),
+      y: cumulata.data.map(d => parseFloat(d.value) - parseFloat(cumulata.data[0].value)),
       type: 'scatter',
       mode: 'lines',
       name: param.keyLabels['PIOGGIA CUMULATA'],
@@ -62,20 +59,18 @@ const RainCard = ({ param, data, lastUpd }) => {
   }
 
   return (
-    <div className="card shadow-sm hover-shadow mb-4">
+    <div className="card shadow-sm mb-4">
       <div className="card-body">
-        {/* Header icona + titolo */}
         <div className="d-flex align-items-center gap-2 mb-3">
           <div style={{ color: param.color }}>
-            <WaterDropIcon />
+            <i className="bi bi-cloud-drizzle"></i>
           </div>
           <h5 className="card-title mb-0">{param.label}</h5>
         </div>
 
-        {/* Dati attuali */}
-        <div className="row mb-3">
+        <Row className="mb-3">
           {values.map((d, i) => (
-            <div className="col-sm-6 mb-3" key={i}>
+            <Col sm={6} className="mb-3" key={i}>
               <h5>{d.value.toFixed(1)} {d.unit}</h5>
               <small className="text-secondary d-block">{d.label}</small>
               <small className="text-muted d-block">
@@ -87,11 +82,10 @@ const RainCard = ({ param, data, lastUpd }) => {
                   minute: '2-digit'
                 })}
               </small>
-            </div>
+            </Col>
           ))}
-        </div>
+        </Row>
 
-        {/* Grafico */}
         {traces.length > 0 && (
           <Plot
             data={traces}
