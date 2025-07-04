@@ -62,9 +62,7 @@ const RainCard = ({ param, data, lastUpd }) => {
     <div className="card shadow-sm mb-4">
       <div className="card-body">
         <div className="d-flex align-items-center gap-2 mb-3">
-          <div style={{ color: param.color }}>
-            <i className="bi bi-cloud-drizzle"></i>
-          </div>
+          <div style={{ color: param.color }}>{param.icon}</div>
           <h5 className="card-title mb-0">{param.label}</h5>
         </div>
 

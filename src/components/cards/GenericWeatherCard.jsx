@@ -41,7 +41,7 @@ const GenericWeatherCard = ({ param, data, fmtTime, lastUpd }) => {
 
   const traces = values.map((v, i) => ({
     x: v.data.map(d => new Date(d.timestamp || d.timedate)),
-    y: v.data.map(d => v.key === 'PIOGGIA CUMULATA' ? parseFloat(d.value) - parseFloat(v.data[0].value) : parseFloat(d.value)),
+    y: v.data.map(d => parseFloat(d.value)),
     type: 'scatter',
     mode: 'lines',
     name: v.label,
