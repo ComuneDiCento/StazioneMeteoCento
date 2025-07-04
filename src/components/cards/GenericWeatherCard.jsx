@@ -85,21 +85,22 @@ const GenericWeatherCard = ({ param, data, fmtTime, lastUpd }) => {
             </React.Fragment>
           ))}
         </Row>
-
-        {traces.length > 0 && (
-          <Plot
-            data={traces}
-            layout={{
-              height: 240,
-              margin: { t: 10, r: 10, b: 40, l: 40 },
-              xaxis: { title: 'Orario', tickformat: '%d/%m, %H:%M', type: 'date' },
-              yaxis: { title: values[0]?.unit || '', autorange: true },
-              legend: { orientation: 'h' },
-            }}
-            config={{ displayModeBar: false, responsive: true, staticPlot: true }}
-            style={{ width: '100%' }}
-          />
-        )}
+        <Row>
+          {traces.length > 0 && (
+            <Plot
+              data={traces}
+              layout={{
+                height: 240,
+                margin: { t: 10, r: 10, b: 40, l: 40 },
+                xaxis: { title: 'Orario', tickformat: '%d/%m<br>%H:%M', type: 'date' },
+                yaxis: { title: values[0]?.unit || '', autorange: true },
+                legend: { orientation: 'h', x: 0.5, xanchor: 'center', y: -0.3 },
+              }}
+              config={{ displayModeBar: false, responsive: true, staticPlot: true }}
+              style={{ width: '100%' }}
+            />
+          )}
+        </Row>
       </div>
     </div>
   );

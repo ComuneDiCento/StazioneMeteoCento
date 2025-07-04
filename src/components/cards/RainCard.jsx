@@ -84,27 +84,35 @@ const RainCard = ({ param, data, lastUpd }) => {
           ))}
         </Row>
 
-        {traces.length > 0 && (
+        <Row>{traces.length > 0 && (
           <Plot
             data={traces}
             layout={{
               height: 240,
-              margin: { t: 10, r: 10, b: 40, l: 40 },
+              margin: { t: 10, r: 10, b: 60, l: 40 },
               xaxis: {
                 title: 'Orario',
                 type: 'date',
-                tickformat: '%d/%m, %H:%M'
+                tickformat: '%d/%m<br>%H:%M',
+                automargin: true
               },
               yaxis: {
                 title: values[0]?.unit || 'mm',
-                autorange: true
+                autorange: true,
+                rangemode: 'tozero'
               },
-              legend: { orientation: 'h' }
+              legend: {
+                orientation: 'h',
+                x: 0.5,
+                xanchor: 'center',
+                y: -0.3
+              }
             }}
             config={{ displayModeBar: false, responsive: true, staticPlot: true }}
             style={{ width: '100%' }}
           />
         )}
+        </Row>
       </div>
     </div>
   );

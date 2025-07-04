@@ -90,11 +90,11 @@ const WindCard = ({ param, data, fmtTime, lastUpd }) => {
             </Col>
           ))}
         </Row>
-
+<Row>
         {plotVelocity.length > 0 && (
           <Plot
             data={plotVelocity}
-            layout={{ height: 250, margin: { t: 30, r: 10, b: 40, l: 40 }, xaxis: { title: 'Orario', type: 'date', tickformat: '%d/%m, %H:%M' }, yaxis: { title: entryMedia?.measure?.descrizione_unita_misura || 'm/s', autorange: true }, legend: { orientation: 'h' } }}
+            layout={{ height: 250, margin: { t: 30, r: 10, b: 40, l: 40 }, xaxis: { title: 'Orario', type: 'date', tickformat: '%d/%m<br>%H:%M' }, yaxis: { title: entryMedia?.measure?.descrizione_unita_misura || 'm/s', autorange: true }, legend: { orientation: 'h', x: 0.5, y: -0.3, xanchor: 'center', yanchor: 'top' } }}
             config={{ displayModeBar: false, responsive: true, staticPlot: true }}
             style={{ width: '100%' }}
           />
@@ -103,7 +103,7 @@ const WindCard = ({ param, data, fmtTime, lastUpd }) => {
         {plotDirection.length > 0 && (
           <Plot
             data={plotDirection}
-            layout={{ height: 200, margin: { t: 40, b: 40, l: 40, r: 10 }, xaxis: { title: 'Orario', type: 'date', tickformat: '%d/%m, %H:%M' }, yaxis: { title: 'Gradi', autorange: true }, legend: { orientation: 'h' } }}
+            layout={{ height: 200, margin: { t: 40, b: 40, l: 40, r: 10 }, xaxis: { title: 'Orario', type: 'date', tickformat: '%d/%m<br>%H:%M' }, yaxis: { title: 'Gradi', autorange: true }, legend: { orientation: 'h', x: 0.5, y: -0.3, xanchor: 'center', yanchor: 'top' } }}
             config={{ displayModeBar: false, responsive: true, staticPlot: true }}
             style={{ width: '100%' }}
           />
@@ -152,12 +152,13 @@ const WindCard = ({ param, data, fmtTime, lastUpd }) => {
             },
             showlegend: true,
             legend: { orientation: 'v', x: 0.95, y: 0.5 },
-            margin: { t: 60, b: 20, l: 20, r: 140 },
+            margin: { t: 60, b: 20, l: 20, r: 150 },
             height: 400
           }}
           config={{ displayModeBar: false, responsive: true, staticPlot: true }}
           style={{ width: '100%' }}
         />
+        </Row>
       </div>
     </div>
   );

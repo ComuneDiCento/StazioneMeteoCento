@@ -195,7 +195,7 @@ const WeatherDashboard = () => {
         {error && <Alert color="danger">{error}</Alert>}
 
         <Row>
-          <Col md={6}>
+          <Col lg={6}>
             {leftParams.map(p => (
               <div className="mb-4" key={p.label}>
                 <WeatherCardWrapper
@@ -208,7 +208,7 @@ const WeatherDashboard = () => {
               </div>
             ))}
           </Col>
-          <Col md={6}>
+          <Col lg={6}>
             {rightParams.map(p => (
               <div className="mb-4" key={p.label}>
                 <WeatherCardWrapper

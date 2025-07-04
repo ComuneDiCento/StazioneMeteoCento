@@ -68,7 +68,7 @@ const TemperatureCard = ({ param, data, lastUpd, fmtTime }) => {
     <div className="card shadow-sm mb-4">
       <div className="card-body">
         <div className="d-flex align-items-center gap-2 mb-3">
-<div style={{ color: param.color }}>{param.icon}</div>
+          <div style={{ color: param.color }}>{param.icon}</div>
           <h5 className="card-title mb-0">{param.label}</h5>
         </div>
 
@@ -89,28 +89,29 @@ const TemperatureCard = ({ param, data, lastUpd, fmtTime }) => {
             </Col>
           ))}
         </Row>
-
-        {traces.length > 0 && (
-          <Plot
-            data={traces}
-            layout={{
-              height: 250,
-              margin: { t: 10, r: 10, b: 40, l: 40 },
-              xaxis: {
-                title: 'Orario',
-                tickformat: '%d/%m, %H:%M',
-                type: 'date'
-              },
-              yaxis: {
-                title: baseTemp?.measure?.descrizione_unita_misura || '°C',
-                autorange: true
-              },
-              legend: { orientation: 'h' }
-            }}
-            config={{ displayModeBar: false, responsive: true, staticPlot: true }}
-            style={{ width: '100%' }}
-          />
-        )}
+        <Row>
+          {traces.length > 0 && (
+            <Plot
+              data={traces}
+              layout={{
+                height: 250,
+                margin: { t: 10, r: 10, b: 30, l: 40 },
+                xaxis: {
+                  title: 'Orario',
+                  tickformat: '%d/%m<br>%H:%M',
+                  type: 'date'
+                },
+                yaxis: {
+                  title: baseTemp?.measure?.descrizione_unita_misura || '°C',
+                  autorange: true
+                },
+                legend: { orientation: 'h', x: 0.5, y: -0.3, xanchor: 'center', yanchor: 'top' }
+              }}
+              config={{ displayModeBar: false, responsive: true, staticPlot: true }}
+              style={{ width: '100%' }}
+            />
+          )}
+        </Row>
       </div>
     </div>
   );
