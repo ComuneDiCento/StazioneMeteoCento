@@ -12,12 +12,13 @@ export const Footer: FC = () => {
               <div className="it-brand-wrapper">
                 <a
                   className=""
-                  href="#"
+                  href="https://www.comune.cento.fe.it"
+                  title="Vai alla pagina del Comune"
                 >
                   <Icon icon="src/assets/stemma.png" />
                   <div className="it-brand-text">
                     <h2>
-Comune di Cento
+                      Comune di Cento
                     </h2>
 
                   </div>
@@ -43,23 +44,23 @@ Comune di Cento
               </h4>
               <p>
                 <strong>
-Comune di Cento
-                </strong><br/>
-Via M.Provenzali 15, Cento, FE - 44042 (Sede Legale)<br/>
-Via Guercino 62, Cento, FE - 44042 (Sede operativa)<br/>
-Codice Fiscale: 81000520387<br/>
-Partita IVA: 00152130381
+                  Comune di Cento
+                </strong><br />
+                Via M.Provenzali 15, Cento, FE - 44042 (Sede Legale)<br />
+                Via Guercino 62, Cento, FE - 44042 (Sede operativa)<br />
+                Codice Fiscale: 81000520387<br />
+                Partita IVA: 00152130381
               </p>
               <LinkList className="footer-list clearfix">
-              PEC
+                PEC
                 <LinkListItem
                   href="mailto:comune.cento@cert.comune.cento.fe.it"
                   title="Vai alla pagina: Posta Elettronica Certificata"
                 >
-comune.cento@cert.comune.cento.fe.it
+                  comune.cento@cert.comune.cento.fe.it
                 </LinkListItem>
-Centralino Unico: 0516843111<br/>
-URP numero verde <strong>800 375515</strong>
+                Centralino Unico: 0516843111<br />
+                URP numero verde <strong>800 375515</strong>
 
               </LinkList>
             </Col>
