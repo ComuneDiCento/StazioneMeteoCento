@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Plot from 'react-plotly.js';
-import { Row, Col } from 'design-react-kit';
+import { Card, CardHeader, CardBody, Row, Col } from 'design-react-kit';
 import { toRomeDate } from '../../utils/dataUtils';
 
 const getExtreme = (entry, type) => {
@@ -14,6 +14,14 @@ const getExtreme = (entry, type) => {
 
 const GenericWeatherCard = ({ param, data, fmtTime, lastUpd }) => {
   const hist = data || [];
+  const [plotKey, setPlotKey] = useState(0);
+
+  // 🔧 Rerender plot on window resize
+  useEffect(() => {
+    const handleResize = () => setPlotKey(k => k + 1);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const values = param.keys.reduce((acc, k) => {
     const entry = hist.find(h => h.measure.key === k);
@@ -49,8 +57,8 @@ const GenericWeatherCard = ({ param, data, fmtTime, lastUpd }) => {
   }));
 
   return (
-    <div className="card shadow-sm mb-4">
-      <div className="card-body">
+    <Card>
+      <CardHeader>
         <div className="d-flex align-items-center gap-2 mb-3">
           <div style={{ color: param.color }}>{param.icon}</div>
           <h5 className="card-title mb-0">{param.label}</h5>
@@ -85,9 +93,13 @@ const GenericWeatherCard = ({ param, data, fmtTime, lastUpd }) => {
             </React.Fragment>
           ))}
         </Row>
+      </CardHeader>
+
+      <CardBody>
         <Row>
           {traces.length > 0 && (
             <Plot
+              key={plotKey} // 🔑 Ogni volta che cambia plotKey, Plotly si ricrea
               data={traces}
               layout={{
                 height: 240,
@@ -101,8 +113,8 @@ const GenericWeatherCard = ({ param, data, fmtTime, lastUpd }) => {
             />
           )}
         </Row>
-      </div>
-    </div>
+      </CardBody>
+    </Card>
   );
 };
 

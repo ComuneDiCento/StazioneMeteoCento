@@ -78,48 +78,63 @@ const WeatherDashboard = () => {
   const [error, setError] = useState('');
   const [lastUpd, setLastUpd] = useState(null);
 
-  const fetchStation = useCallback(async id => {
-    const r1 = await fetch(`https://sensornet-api.lepida.it/getMeasuresID/${id}`);
-    if (!r1.ok) throw new Error('Errore misure');
-    const ms = await r1.json();
-    const ids = ms.map(m => m.id_misura).join(',');
-    const r2 = await fetch(`https://sensornet-api.lepida.it/getMeasureListLastData/${ids}`);
-    if (!r2.ok) throw new Error('Errore dati recenti');
-    const data = await r2.json();
-    return { measures: ms, data };
-  }, []);
+ // Funzione fetchStation: NON serve useCallback, non dipende da nulla esterno
+const fetchStation = async (id) => {
+  const r1 = await fetch(`https://sensornet-api.lepida.it/getMeasuresID/${id}`);
+  if (!r1.ok) throw new Error('Errore misure');
+  const ms = await r1.json();
 
-  const refresh = useCallback(async () => {
-    try {
-      setError('');
-      const [m, w] = await Promise.all([
-        fetchStation(WEATHER_STATIONS.MAIN),
-        fetchStation(WEATHER_STATIONS.WIND)
-      ]);
-      setWeather({ main: m, wind: w });
-      setLastUpd(new Date());
+  const ids = ms.map(m => m.id_misura).join(',');
+  const r2 = await fetch(`https://sensornet-api.lepida.it/getMeasureListLastData/${ids}`);
+  if (!r2.ok) throw new Error('Errore dati recenti');
+  const data = await r2.json();
 
-      for (const p of weatherParameters) {
-        const allMeasures = [...m.measures, ...w.measures];
-        const sensors = p.keys.map(k => {
-          const mm = allMeasures.find(x => x.descrizione.includes(k));
-          return mm ? { id: mm.id_misura, key: k, descrizione_unita_misura: mm.descrizione_unita_misura } : null;
-        }).filter(Boolean);
-        if (sensors.length) {
-          const hist = await fetchHistoricalData(sensors, historyHours);
-          setHistMap(prev => ({ ...prev, [p.label]: hist }));
-        }
+  return { measures: ms, data };
+};
+
+// Funzione refresh: ricreata ad ogni render, prende SEMPRE le versioni aggiornate di weatherParameters e historyHours
+const refresh = async () => {
+  try {
+    setError('');
+    const [m, w] = await Promise.all([
+      fetchStation(WEATHER_STATIONS.MAIN),
+      fetchStation(WEATHER_STATIONS.WIND)
+    ]);
+    setWeather({ main: m, wind: w });
+    setLastUpd(new Date());
+
+    const newHistMap = {};  // 🛡️ accumula qui i risultati
+
+    for (const p of weatherParameters) {
+      const allMeasures = [...m.measures, ...w.measures];
+      const sensors = p.keys.map(k => {
+        const mm = allMeasures.find(x => x.descrizione.toUpperCase().includes(k.toUpperCase()));
+        return mm ? { id: mm.id_misura, key: k, descrizione_unita_misura: mm.descrizione_unita_misura } : null;
+      }).filter(Boolean);
+
+      if (sensors.length) {
+        const hist = await fetchHistoricalData(sensors, historyHours);
+        newHistMap[p.label] = hist;
+      } else {
+        console.warn(`⚠️ Nessun sensore trovato per ${p.label}`);
       }
-    } catch (e) {
-      setError(e.message);
     }
-  }, [fetchStation, historyHours]);
 
-  useEffect(() => {
-    refresh();
-    const iv = setInterval(refresh, intervalMs);
-    return () => clearInterval(iv);
-  }, [refresh, intervalMs]);
+    // ✔️ aggiorna histMap una sola volta, quando tutti i dati sono pronti
+    setHistMap(newHistMap);
+
+  } catch (e) {
+    setError(e.message);
+  }
+};
+
+
+// useEffect: chiama refresh al mount e ogni volta che cambia intervalMs o historyHours
+useEffect(() => {
+  refresh();
+  const iv = setInterval(refresh, intervalMs);
+  return () => clearInterval(iv);
+}, [intervalMs, historyHours]); // refresh non serve nelle dipendenze perché lo definisci inline
 
   const formatChartData = (sets, idxs = sets.map((_, i) => i), param) => {
     if (!sets.length) return { xAxis: [], series: [] };

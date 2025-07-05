@@ -1,10 +1,18 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Plot from 'react-plotly.js';
-import { Row, Col } from 'design-react-kit';
+import { Card, CardHeader, CardBody, Row, Col } from 'design-react-kit';
 import { toRomeDate } from '../../utils/dataUtils';
 
 const RainCard = ({ param, data, lastUpd }) => {
   const hist = data || [];
+  const [plotKey, setPlotKey] = useState(0);
+
+  // 🔧 Aggiorna plotKey al resize per forzare il re-render del grafico
+  useEffect(() => {
+    const handleResize = () => setPlotKey(k => k + 1);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const cumulata = hist.find(h => h.measure.key === 'PIOGGIA CUMULATA');
   const incrementale = hist.find(h => h.measure.key === 'PIOGGIA INCREMENTALE');
@@ -59,13 +67,12 @@ const RainCard = ({ param, data, lastUpd }) => {
   }
 
   return (
-    <div className="card shadow-sm mb-4">
-      <div className="card-body">
+    <Card>
+      <CardHeader>
         <div className="d-flex align-items-center gap-2 mb-3">
           <div style={{ color: param.color }}>{param.icon}</div>
           <h5 className="card-title mb-0">{param.label}</h5>
         </div>
-
         <Row className="mb-3">
           {values.map((d, i) => (
             <Col sm={6} className="mb-3" key={i}>
@@ -83,38 +90,42 @@ const RainCard = ({ param, data, lastUpd }) => {
             </Col>
           ))}
         </Row>
+      </CardHeader>
 
-        <Row>{traces.length > 0 && (
-          <Plot
-            data={traces}
-            layout={{
-              height: 240,
-              margin: { t: 10, r: 10, b: 60, l: 40 },
-              xaxis: {
-                title: 'Orario',
-                type: 'date',
-                tickformat: '%d/%m<br>%H:%M',
-                automargin: true
-              },
-              yaxis: {
-                title: values[0]?.unit || 'mm',
-                autorange: true,
-                rangemode: 'tozero'
-              },
-              legend: {
-                orientation: 'h',
-                x: 0.5,
-                xanchor: 'center',
-                y: -0.3
-              }
-            }}
-            config={{ displayModeBar: false, responsive: true, staticPlot: true }}
-            style={{ width: '100%' }}
-          />
-        )}
+      <CardBody>
+        <Row>
+          {traces.length > 0 && (
+            <Plot
+              key={plotKey} // 🔑 forza il remount al resize
+              data={traces}
+              layout={{
+                height: 240,
+                margin: { t: 10, r: 10, b: 60, l: 40 },
+                xaxis: {
+                  title: 'Orario',
+                  type: 'date',
+                  tickformat: '%d/%m<br>%H:%M',
+                  automargin: true
+                },
+                yaxis: {
+                  title: values[0]?.unit || 'mm',
+                  autorange: true,
+                  rangemode: 'tozero'
+                },
+                legend: {
+                  orientation: 'h',
+                  x: 0.5,
+                  xanchor: 'center',
+                  y: -0.3
+                }
+              }}
+              config={{ displayModeBar: false, responsive: true, staticPlot: true }}
+              style={{ width: '100%' }}
+            />
+          )}
         </Row>
-      </div>
-    </div>
+      </CardBody>
+    </Card>
   );
 };
 

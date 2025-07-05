@@ -17,6 +17,7 @@
     "bootstrap-italia": "^2.16.0",
     "design-react-kit": "^5.8.2",
     "plotly.js": "^3.0.1",
+    "plotly.js-dist-min": "^3.0.1",
     "react": "^19.1.0",
     "react-bootstrap-icons": "^1.11.6",
     "react-dom": "^19.1.0",

@@ -1,9 +1,18 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Plot from 'react-plotly.js';
-import { Row, Col } from 'design-react-kit';
+import { Row, Col, Card, CardHeader, CardBody } from 'design-react-kit';
 import { toRomeDate } from '../../utils/dataUtils';
 
 const TemperatureCard = ({ param, data, lastUpd, fmtTime }) => {
+  const [plotKey, setPlotKey] = useState(0);
+
+  // 🔧 Forza il remount del grafico quando la finestra viene ridimensionata
+  useEffect(() => {
+    const handleResize = () => setPlotKey(k => k + 1);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const baseTemp = data?.find(h => h.measure.key === 'TEMPERATURA');
   const maxTemp = data?.find(h => h.measure.key === 'MAX');
   const minTemp = data?.find(h => h.measure.key === 'MIN');
@@ -65,13 +74,13 @@ const TemperatureCard = ({ param, data, lastUpd, fmtTime }) => {
   ].filter(Boolean);
 
   return (
-    <div className="card shadow-sm mb-4">
-      <div className="card-body">
+<Card><CardHeader>
         <div className="d-flex align-items-center gap-2 mb-3">
           <div style={{ color: param.color }}>{param.icon}</div>
           <h5 className="card-title mb-0">{param.label}</h5>
         </div>
-
+        </CardHeader>
+        <CardBody>
         <Row className="mb-3">
           {vals.map((d, i) => (
             <Col sm={4} className="mb-3" key={i}>
@@ -89,9 +98,12 @@ const TemperatureCard = ({ param, data, lastUpd, fmtTime }) => {
             </Col>
           ))}
         </Row>
+        
+
         <Row>
           {traces.length > 0 && (
             <Plot
+              key={plotKey} // 🔑 Rimonta il grafico al resize
               data={traces}
               layout={{
                 height: 250,
@@ -112,8 +124,8 @@ const TemperatureCard = ({ param, data, lastUpd, fmtTime }) => {
             />
           )}
         </Row>
-      </div>
-    </div>
+      </CardBody>
+    </Card> 
   );
 };
 
