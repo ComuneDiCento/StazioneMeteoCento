@@ -78,63 +78,63 @@ const WeatherDashboard = () => {
   const [error, setError] = useState('');
   const [lastUpd, setLastUpd] = useState(null);
 
- // Funzione fetchStation: NON serve useCallback, non dipende da nulla esterno
-const fetchStation = async (id) => {
-  const r1 = await fetch(`https://sensornet-api.lepida.it/getMeasuresID/${id}`);
-  if (!r1.ok) throw new Error('Errore misure');
-  const ms = await r1.json();
+  // Funzione fetchStation: NON serve useCallback, non dipende da nulla esterno
+  const fetchStation = async (id) => {
+    const r1 = await fetch(`https://sensornet-api.lepida.it/getMeasuresID/${id}`);
+    if (!r1.ok) throw new Error('Errore misure');
+    const ms = await r1.json();
 
-  const ids = ms.map(m => m.id_misura).join(',');
-  const r2 = await fetch(`https://sensornet-api.lepida.it/getMeasureListLastData/${ids}`);
-  if (!r2.ok) throw new Error('Errore dati recenti');
-  const data = await r2.json();
+    const ids = ms.map(m => m.id_misura).join(',');
+    const r2 = await fetch(`https://sensornet-api.lepida.it/getMeasureListLastData/${ids}`);
+    if (!r2.ok) throw new Error('Errore dati recenti');
+    const data = await r2.json();
 
-  return { measures: ms, data };
-};
+    return { measures: ms, data };
+  };
 
-// Funzione refresh: ricreata ad ogni render, prende SEMPRE le versioni aggiornate di weatherParameters e historyHours
-const refresh = async () => {
-  try {
-    setError('');
-    const [m, w] = await Promise.all([
-      fetchStation(WEATHER_STATIONS.MAIN),
-      fetchStation(WEATHER_STATIONS.WIND)
-    ]);
-    setWeather({ main: m, wind: w });
-    setLastUpd(new Date());
+  // Funzione refresh: ricreata ad ogni render, prende SEMPRE le versioni aggiornate di weatherParameters e historyHours
+  const refresh = async () => {
+    try {
+      setError('');
+      const [m, w] = await Promise.all([
+        fetchStation(WEATHER_STATIONS.MAIN),
+        fetchStation(WEATHER_STATIONS.WIND)
+      ]);
+      setWeather({ main: m, wind: w });
+      setLastUpd(new Date());
 
-    const newHistMap = {};  // 🛡️ accumula qui i risultati
+      const newHistMap = {};  // 🛡️ accumula qui i risultati
 
-    for (const p of weatherParameters) {
-      const allMeasures = [...m.measures, ...w.measures];
-      const sensors = p.keys.map(k => {
-        const mm = allMeasures.find(x => x.descrizione.toUpperCase().includes(k.toUpperCase()));
-        return mm ? { id: mm.id_misura, key: k, descrizione_unita_misura: mm.descrizione_unita_misura } : null;
-      }).filter(Boolean);
+      for (const p of weatherParameters) {
+        const allMeasures = [...m.measures, ...w.measures];
+        const sensors = p.keys.map(k => {
+          const mm = allMeasures.find(x => x.descrizione.toUpperCase().includes(k.toUpperCase()));
+          return mm ? { id: mm.id_misura, key: k, descrizione_unita_misura: mm.descrizione_unita_misura } : null;
+        }).filter(Boolean);
 
-      if (sensors.length) {
-        const hist = await fetchHistoricalData(sensors, historyHours);
-        newHistMap[p.label] = hist;
-      } else {
-        console.warn(`⚠️ Nessun sensore trovato per ${p.label}`);
+        if (sensors.length) {
+          const hist = await fetchHistoricalData(sensors, historyHours);
+          newHistMap[p.label] = hist;
+        } else {
+          console.warn(`⚠️ Nessun sensore trovato per ${p.label}`);
+        }
       }
+
+      // ✔️ aggiorna histMap una sola volta, quando tutti i dati sono pronti
+      setHistMap(newHistMap);
+
+    } catch (e) {
+      setError(e.message);
     }
-
-    // ✔️ aggiorna histMap una sola volta, quando tutti i dati sono pronti
-    setHistMap(newHistMap);
-
-  } catch (e) {
-    setError(e.message);
-  }
-};
+  };
 
 
-// useEffect: chiama refresh al mount e ogni volta che cambia intervalMs o historyHours
-useEffect(() => {
-  refresh();
-  const iv = setInterval(refresh, intervalMs);
-  return () => clearInterval(iv);
-}, [intervalMs, historyHours]); // refresh non serve nelle dipendenze perché lo definisci inline
+  // useEffect: chiama refresh al mount e ogni volta che cambia intervalMs o historyHours
+  useEffect(() => {
+    refresh();
+    const iv = setInterval(refresh, intervalMs);
+    return () => clearInterval(iv);
+  }, [intervalMs, historyHours]); // refresh non serve nelle dipendenze perché lo definisci inline
 
   const formatChartData = (sets, idxs = sets.map((_, i) => i), param) => {
     if (!sets.length) return { xAxis: [], series: [] };
@@ -148,97 +148,97 @@ useEffect(() => {
   };
 
   return (
-    <div className="it-page-section">
-      <Container>
-        <Row className="justify-content-between align-items-center mb-4">
-          {/* Colonna per il titolo */}
+    <Container>
+      <Row className="justify-content-between align-items-center mb-4">
+        {/* Colonna per il titolo */}
+        <Col xs="auto">
+          <h1 className="it-heading-xl mb-0">
+            Stazione Meteo - Comune di Cento (Ultime {historyHours}h)
+          </h1>
+        </Col>
+
+        {/* Colonna per i selettori */}
+        <Col xs="auto">
+          <div className="d-flex align-items-center">
+            <FormGroup className="me-3 mb-0">
+              <Label for="interval-select" className="mb-0">Intervallo</Label>
+              <Select
+                id="interval-select"
+                value={intervalMs}
+                onChange={value => setIntervalMs(Number(value))}                >
+                <option value={30000}>30s</option>
+                <option value={60000}>1m</option>
+                <option value={300000}>5m</option>
+                <option value={600000}>10m</option>
+              </Select>
+            </FormGroup>
+
+            <FormGroup className="mb-0">
+              <Label for="history-select" className="mb-0">Storico</Label>
+              <Select
+                id="history-select"
+                value={historyHours}
+                onChange={value => setHistoryHours(Number(value))}
+              >
+                <option value={24}>24h</option>
+                <option value={48}>48h</option>
+                <option value={72}>72h</option>
+                <option value={96}>96h</option>
+              </Select>
+            </FormGroup>
+          </div>
+        </Col>
+
+        {/* Colonna per l'ultimo aggiornamento */}
+        {lastUpd && (
           <Col xs="auto">
-            <h1 className="it-heading-xl mb-0">
-              Stazione Meteo - Comune di Cento (Ultime {historyHours}h)
-            </h1>
+            <span className="text-muted">
+              Ultimo aggiornamento: {fmtTime(lastUpd)}
+            </span>
           </Col>
-
-          {/* Colonna per i selettori */}
-          <Col xs="auto">
-            <div className="d-flex align-items-center">
-              <FormGroup className="me-3 mb-0">
-                <Label for="interval-select" className="mb-0">Intervallo</Label>
-                <Select
-                  id="interval-select"
-                  value={intervalMs}
-                  onChange={value => setIntervalMs(Number(value))}                >
-                  <option value={30000}>30s</option>
-                  <option value={60000}>1m</option>
-                  <option value={300000}>5m</option>
-                  <option value={600000}>10m</option>
-                </Select>
-              </FormGroup>
-
-              <FormGroup className="mb-0">
-                <Label for="history-select" className="mb-0">Storico</Label>
-                <Select
-                  id="history-select"
-                  value={historyHours}
-                  onChange={value => setHistoryHours(Number(value))}
-                >
-                  <option value={24}>24h</option>
-                  <option value={48}>48h</option>
-                  <option value={72}>72h</option>
-                  <option value={96}>96h</option>
-                </Select>
-              </FormGroup>
-            </div>
-          </Col>
-
-          {/* Colonna per l'ultimo aggiornamento */}
-          {lastUpd && (
-            <Col xs="auto">
-              <span className="text-muted">
-                Ultimo aggiornamento: {fmtTime(lastUpd)}
-              </span>
-            </Col>
-          )}
-        </Row>
+        )}
+      </Row>
 
 
-        <p>
+      <Row>
+        <p className="text-start">
           Dati provenienti dalla stazione meteo installata nel <a href="https://comune.cento.fe.it">Comune di Cento</a> (presso la sede della Polizia Locale) da <a href="https://lepida.it">Lepida S.c.p.A.</a> nell'ambito del progetto <a href="https://retepaiot.it">RetePAIOT</a> della <a href="https://www.regione.emilia-romagna.it/">Regione Emilia-Romagna</a>.<br />
           <i>I sorgenti di questa pagina sono all'indirizzo <a href="https://github.com/ComuneDiCento/StazioneMeteoCento">https://github.com/ComuneDiCento/StazioneMeteoCento</a>.</i>
         </p>
+      </Row>
 
 
-        {error && <Alert color="danger">{error}</Alert>}
+      {error && <Alert color="danger">{error}</Alert>}
 
-        <Row>
-          <Col lg={6}>
-            {leftParams.map(p => (
-              <div className="mb-4" key={p.label}>
-                <WeatherCardWrapper
-                  param={p}
-                  data={histMap[p.label]}
-                  lastUpd={lastUpd}
-                  fmtTime={fmtTime}
-                  formatChartData={formatChartData}
-                />
-              </div>
-            ))}
-          </Col>
-          <Col lg={6}>
-            {rightParams.map(p => (
-              <div className="mb-4" key={p.label}>
-                <WeatherCardWrapper
-                  param={p}
-                  data={histMap[p.label]}
-                  lastUpd={lastUpd}
-                  fmtTime={fmtTime}
-                  formatChartData={formatChartData}
-                />
-              </div>
-            ))}
-          </Col>
-        </Row>
-      </Container>
-    </div>
+      <Row>
+        <Col lg={6}>
+          {leftParams.map(p => (
+            <div className="mb-4" key={p.label}>
+              <WeatherCardWrapper
+                param={p}
+                data={histMap[p.label]}
+                lastUpd={lastUpd}
+                fmtTime={fmtTime}
+                formatChartData={formatChartData}
+              />
+            </div>
+          ))}
+        </Col>
+        <Col lg={6}>
+          {rightParams.map(p => (
+            <div className="mb-4" key={p.label}>
+              <WeatherCardWrapper
+                param={p}
+                data={histMap[p.label]}
+                lastUpd={lastUpd}
+                fmtTime={fmtTime}
+                formatChartData={formatChartData}
+              />
+            </div>
+          ))}
+        </Col>
+      </Row>
+    </Container>
   );
 };
 
