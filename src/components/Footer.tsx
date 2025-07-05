@@ -15,7 +15,7 @@ export const Footer: FC = () => {
                   href="https://www.comune.cento.fe.it"
                   title="Vai alla pagina del Comune"
                 >
-                  <Icon icon="src/assets/stemma.png" />
+                  <Icon icon="stemma.png" />
                   <div className="it-brand-text">
                     <h2>
                       Comune di Cento
