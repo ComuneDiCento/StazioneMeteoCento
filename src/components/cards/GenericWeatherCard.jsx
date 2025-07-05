@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Plot from 'react-plotly.js';
-import { Card, CardHeader, CardBody, Row, Col } from 'design-react-kit';
+import { Card, CardHeader, CardTitle, CardBody, Row, Col } from 'design-react-kit';
 import { toRomeDate } from '../../utils/dataUtils';
 
 const getExtreme = (entry, type) => {
@@ -57,12 +57,14 @@ const GenericWeatherCard = ({ param, data, fmtTime, lastUpd }) => {
   }));
 
   return (
-    <Card>
+    <Card className="card-bg"
+      spacing
+    >
       <CardHeader>
-        <div className="d-flex align-items-center gap-2 mb-3">
+        <CardTitle style={{ display: 'flex', alignItems: 'center' }}>
           <div style={{ color: param.color }}>{param.icon}</div>
-          <h5 className="card-title mb-0">{param.label}</h5>
-        </div>
+          <h4 className="card-title mb-0" style={{ marginLeft: '8px' }}>{param.label}</h4>
+        </CardTitle>
 
         <Row className="mb-3">
           {values.map((v, i) => (

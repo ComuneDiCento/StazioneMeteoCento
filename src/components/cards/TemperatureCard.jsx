@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Plot from 'react-plotly.js';
-import { Row, Col, Card, CardHeader, CardBody } from 'design-react-kit';
+import { Row, Col, Card, CardHeader, CardTitle, CardBody } from 'design-react-kit';
 import { toRomeDate } from '../../utils/dataUtils';
 
 const TemperatureCard = ({ param, data, lastUpd, fmtTime }) => {
@@ -74,13 +74,15 @@ const TemperatureCard = ({ param, data, lastUpd, fmtTime }) => {
   ].filter(Boolean);
 
   return (
-<Card><CardHeader>
-        <div className="d-flex align-items-center gap-2 mb-3">
+    <Card
+      className="card-bg"
+      spacing
+    ><CardHeader>
+        <CardTitle style={{ display: 'flex', alignItems: 'center' }}>
           <div style={{ color: param.color }}>{param.icon}</div>
-          <h5 className="card-title mb-0">{param.label}</h5>
-        </div>
-        </CardHeader>
-        <CardBody>
+          <h4 className="card-title mb-0" style={{ marginLeft: '8px' }}>{param.label}</h4>
+        </CardTitle>
+
         <Row className="mb-3">
           {vals.map((d, i) => (
             <Col sm={4} className="mb-3" key={i}>
@@ -98,7 +100,8 @@ const TemperatureCard = ({ param, data, lastUpd, fmtTime }) => {
             </Col>
           ))}
         </Row>
-        
+      </CardHeader>
+      <CardBody>
 
         <Row>
           {traces.length > 0 && (
@@ -125,7 +128,7 @@ const TemperatureCard = ({ param, data, lastUpd, fmtTime }) => {
           )}
         </Row>
       </CardBody>
-    </Card> 
+    </Card>
   );
 };
 
