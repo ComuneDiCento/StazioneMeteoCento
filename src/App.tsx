@@ -10,8 +10,10 @@ export const App: FC = () => {
     return (
     <div className="App">
       <CompleteHeader />
+      <div className="container my-4">
       <WeatherDashboard />
       <Footer />
+      </div>
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Container, Row, Col, FormGroup, Label, Select, Alert, Button } from 'design-react-kit';
+import { Row, Col, FormGroup, Label, Select, Alert } from 'design-react-kit';
 import { ThermometerHalf, Droplet, Speedometer, Wind, Sun, CloudRain } from 'react-bootstrap-icons';
 import WeatherCardWrapper from './components/cards/WeatherCardWrapper';
 import { fetchHistoricalData } from './utils/dataUtils';
@@ -148,7 +148,7 @@ const WeatherDashboard = () => {
   };
 
   return (
-    <Container>
+    <div>
       <Row className="justify-content-between align-items-center mb-4">
         {/* Colonna per il titolo */}
         <Col xs="auto">
@@ -238,7 +238,7 @@ const WeatherDashboard = () => {
           ))}
         </Col>
       </Row>
-    </Container>
+      </div>
   );
 };
 
