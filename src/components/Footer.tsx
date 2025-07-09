@@ -59,8 +59,8 @@ export const Footer: FC = () => {
                 >
                   comune.cento@cert.comune.cento.fe.it
                 </LinkListItem>
-                Centralino Unico: 0516843111<br />
-                URP numero verde <strong>800 375515</strong>
+                Centralino Unico: <a href="tel:0516843111">0516843111</a><br />
+                URP numero verde: <a href="tel:800375515"><strong>800 375515</strong></a>
 
               </LinkList>
             </Col>
