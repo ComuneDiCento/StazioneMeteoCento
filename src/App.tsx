@@ -1,5 +1,4 @@
-import { FC, useEffect } from "react";
-import HeaderSticky from "bootstrap-italia/dist/plugins/header-sticky";
+import React, { FC, useEffect, useRef, useState } from "react";
 import { CompleteHeader } from "./components";
 import WeatherDashboard from './WeatherDashboard';
 import Footer from "./components/Footer";
@@ -7,24 +6,27 @@ import Footer from "./components/Footer";
 import "./App.css";
 
 export const App: FC = () => {
-  useEffect(() => {
-    const el = document.querySelector<HTMLDivElement>(
-      ".it-header-wrapper.it-header-sticky"
-    );
-    if (el) {
-      HeaderSticky.getOrCreateInstance(el);
-    }
-  }, []);
+  const [historyHours, setHistoryHours] = useState<number>(48);
+  const [intervalMs, setIntervalMs] = useState<number>(300000); // default 5m
 
   return (
     <div className="App">
-      <CompleteHeader />
-      <div className="container my-4">
-        <WeatherDashboard />
+      <div className="it-header-wrapper it-header-sticky">
+        <CompleteHeader historyHours={historyHours} />
       </div>
+
+      <div className="container my-4">
+        <WeatherDashboard
+          historyHours={historyHours}
+          setHistoryHours={setHistoryHours}
+          intervalMs={intervalMs}
+          setIntervalMs={setIntervalMs}
+        />
+      </div>
+
       <Footer />
     </div>
   );
-}
+};
 
 export default App;

@@ -3,13 +3,18 @@ import { Header, HeaderContent, HeaderRightZone, HeaderSocialsZone, Icon, Header
 
 type Props = any;
 
-export const CenterHeader: FC<Props> = ({ props }) => {
+interface CenterHeaderProps {
+  theme?: string;
+  historyHours: number;
+}
+
+export const CenterHeader: FC<Props> = ({ props, historyHours }) => {
 	return (
 		<Header type="center" theme={props?.theme}>
 			<HeaderContent>
 				<HeaderBrand iconName="stemma.png" iconAlt={"Stemma del Comune di Cento"}>
 					<div><h2>Comune di Cento</h2>
-					<p>Stazione Meteo</p></div>
+					<p>Stazione Meteo ({historyHours}h)</p></div>
 				</HeaderBrand>
 				<HeaderRightZone>
 					<HeaderSocialsZone label="Seguici su">

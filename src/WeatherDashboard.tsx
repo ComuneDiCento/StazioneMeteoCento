@@ -1,19 +1,28 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { Row, Col, FormGroup, Label, Select, Alert } from 'design-react-kit';
 import { ThermometerHalf, Droplet, Speedometer, Wind, Sun, CloudRain } from 'react-bootstrap-icons';
 import WeatherCardWrapper from './components/cards/WeatherCardWrapper';
 import { fetchHistoricalData } from './utils/dataUtils';
 
+interface WeatherDashboardProps {
+  historyHours: number;
+  setHistoryHours: (h: number) => void;
+  intervalMs: number;
+  setIntervalMs: (ms: number) => void;
+}
+
 const weatherParameters = [
   {
-    icon: <ThermometerHalf />, label: 'Temperatura',
+    icon: <ThermometerHalf />,
+    label: 'Temperatura',
     keys: ['TEMPERATURA', 'MAX', 'MIN'],
     keyLabels: {
-      'TEMPERATURA': 'Temperatura attuale',
-      'MAX': 'Massima',
-      'MIN': 'Minima'
+      TEMPERATURA: 'Temperatura attuale',
+      MAX: 'Massima',
+      MIN: 'Minima'
     },
-    chartColors: ['#FF5722', '#FF8A65', '#FFAB91'], color: '#FF5722'
+    chartColors: ['#FF5722', '#FF8A65', '#FFAB91'],
+    color: '#FF5722'
   },
   {
     icon: <Droplet />, label: 'Umidità',
@@ -37,13 +46,14 @@ const weatherParameters = [
       'DIREZIONE_VENTO': 'Direzione vento',
       'DIREZIONE RAFFICA': 'Direzione raffica'
     },
-    chartColors: ['#00BCD4', '#4DD0E1', '#80DEEA', '#26C6DA', '#00ACC1'], color: '#00BCD4'
+    chartColors: ['#00BCD4', '#4DD0E1', '#80DEEA', '#26C6DA', '#00ACC1'],
+    color: '#00BCD4'
   },
   {
     icon: <Sun />, label: 'Radiazione',
     keys: ['RADIAZIONE', 'RADIAZIONE MAX'],
     keyLabels: {
-      'RADIAZIONE': 'Radiazione',
+      RADIAZIONE: 'Radiazione',
       'RADIAZIONE MAX': 'Rad. massima'
     },
     chartColors: ['#FFC107', '#FFD54F'], color: '#FFC107'
@@ -59,32 +69,37 @@ const weatherParameters = [
   }
 ];
 
-
 const WEATHER_STATIONS = { MAIN: 12494, WIND: 12501 };
-
 const leftLabels = ['Temperatura', 'Umidità', 'Pressione', 'Radiazione'];
 const rightLabels = ['Vento', 'Pioggia'];
-
 const leftParams = weatherParameters.filter(p => leftLabels.includes(p.label));
 const rightParams = weatherParameters.filter(p => rightLabels.includes(p.label));
 
-const fmtTime = date => date?.toLocaleTimeString('it-IT', { timeZone: 'Europe/Rome', hour: '2-digit', minute: '2-digit' });
+const fmtTime = (date: Date | null) =>
+  date?.toLocaleTimeString('it-IT', { timeZone: 'Europe/Rome', hour: '2-digit', minute: '2-digit' });
 
-const WeatherDashboard = () => {
-  const [intervalMs, setIntervalMs] = useState(60000);
-  const [historyHours, setHistoryHours] = useState(48);
-  const [weather, setWeather] = useState({ main: null, wind: null });
-  const [histMap, setHistMap] = useState({});
-  const [error, setError] = useState('');
-  const [lastUpd, setLastUpd] = useState(null);
+const WeatherDashboard: FC<WeatherDashboardProps> = ({
+  historyHours,
+  setHistoryHours,
+  intervalMs,
+  setIntervalMs
+}) => {
+  const [weather, setWeather] = useState<{ main: any; wind: any }>({ main: null, wind: null });
+  const [histMap, setHistMap] = useState<Record<string, any>>({});
+  const [error, setError] = useState<string>('');
+  const [lastUpd, setLastUpd] = useState<Date | null>(null);
 
-  // Funzione fetchStation: NON serve useCallback, non dipende da nulla esterno
-  const fetchStation = async (id) => {
+
+  useEffect(() => {
+    document.title = `Comune di Cento - Stazione Meteo (Ultime ${historyHours}h)`;
+  }, [historyHours]);
+
+  const fetchStation = async (id: number) => {
     const r1 = await fetch(`https://sensornet-api.lepida.it/getMeasuresID/${id}`);
     if (!r1.ok) throw new Error('Errore misure');
     const ms = await r1.json();
 
-    const ids = ms.map(m => m.id_misura).join(',');
+    const ids = ms.map((m: any) => m.id_misura).join(',');
     const r2 = await fetch(`https://sensornet-api.lepida.it/getMeasureListLastData/${ids}`);
     if (!r2.ok) throw new Error('Errore dati recenti');
     const data = await r2.json();
@@ -92,7 +107,6 @@ const WeatherDashboard = () => {
     return { measures: ms, data };
   };
 
-  // Funzione refresh: ricreata ad ogni render, prende SEMPRE le versioni aggiornate di weatherParameters e historyHours
   const refresh = async () => {
     try {
       setError('');
@@ -103,14 +117,16 @@ const WeatherDashboard = () => {
       setWeather({ main: m, wind: w });
       setLastUpd(new Date());
 
-      const newHistMap = {};  // 🛡️ accumula qui i risultati
+      const newHistMap: Record<string, any> = {};
+      const allMeasures = [...m.measures, ...w.measures];
 
       for (const p of weatherParameters) {
-        const allMeasures = [...m.measures, ...w.measures];
-        const sensors = p.keys.map(k => {
-          const mm = allMeasures.find(x => x.descrizione.toUpperCase().includes(k.toUpperCase()));
-          return mm ? { id: mm.id_misura, key: k, descrizione_unita_misura: mm.descrizione_unita_misura } : null;
-        }).filter(Boolean);
+        const sensors = p.keys
+          .map(k => {
+            const mm = allMeasures.find(x => x.descrizione.toUpperCase().includes(k));
+            return mm ? { id: mm.id_misura, key: k, measure: { key: k, descrizione_unita_misura: mm.descrizione_unita_misura } } : null;
+          })
+          .filter(Boolean) as any[];
 
         if (sensors.length) {
           const hist = await fetchHistoricalData(sensors, historyHours);
@@ -120,28 +136,28 @@ const WeatherDashboard = () => {
         }
       }
 
-      // ✔️ aggiorna histMap una sola volta, quando tutti i dati sono pronti
       setHistMap(newHistMap);
-
-    } catch (e) {
+    } catch (e: any) {
       setError(e.message);
     }
   };
 
-
-  // useEffect: chiama refresh al mount e ogni volta che cambia intervalMs o historyHours
   useEffect(() => {
     refresh();
     const iv = setInterval(refresh, intervalMs);
     return () => clearInterval(iv);
-  }, [intervalMs, historyHours]); 
+  }, [historyHours, intervalMs]);
 
-  const formatChartData = (sets, idxs = sets.map((_, i) => i), param) => {
+  const formatChartData = (
+    sets: any[],
+    idxs: number[] = sets.map((_, i) => i),
+    param: any
+  ) => {
     if (!sets.length) return { xAxis: [], series: [] };
-    const xAxis = sets[idxs[0]].data.map(pt => pt.date);
+    const xAxis = sets[idxs[0]].data.map((pt: any) => pt.date);
     const series = idxs.map((i, j) => {
       const { measure, data } = sets[i];
-      const vals = data.map(pt => parseFloat(pt.value));
+      const vals = data.map((pt: any) => parseFloat(pt.value));
       return { data: vals, label: param.keyLabels[measure.key] || measure.key, color: param.chartColors[j] };
     });
     return { xAxis, series };
@@ -150,14 +166,12 @@ const WeatherDashboard = () => {
   return (
     <div>
       <Row className="justify-content-between align-items-center mb-4">
-        {/* Colonna per il titolo */}
         <Col xs="auto">
           <h1 className="it-heading-xl mb-0">
             Stazione Meteo (Ultime {historyHours}h)
           </h1>
         </Col>
 
-        {/* Colonna per i selettori */}
         <Col xs="auto">
           <div className="d-flex align-items-center">
             <FormGroup className="me-3 mb-0">
@@ -165,7 +179,8 @@ const WeatherDashboard = () => {
               <Select
                 id="interval-select"
                 value={intervalMs}
-                onChange={value => setIntervalMs(Number(value))}                >
+                onChange={(value: string) => setIntervalMs(Number(value))}
+              >
                 <option value={30000}>30s</option>
                 <option value={60000}>1m</option>
                 <option value={300000}>5m</option>
@@ -178,7 +193,7 @@ const WeatherDashboard = () => {
               <Select
                 id="history-select"
                 value={historyHours}
-                onChange={value => setHistoryHours(Number(value))}
+                onChange={(value: string) => setHistoryHours(Number(value))}
               >
                 <option value={24}>24h</option>
                 <option value={48}>48h</option>
@@ -189,7 +204,6 @@ const WeatherDashboard = () => {
           </div>
         </Col>
 
-        {/* Colonna per l'ultimo aggiornamento */}
         {lastUpd && (
           <Col xs="auto">
             <span className="text-muted">
@@ -199,14 +213,12 @@ const WeatherDashboard = () => {
         )}
       </Row>
 
-
       <Row>
         <p className="text-start">
           Dati provenienti dalla stazione meteo installata nel <a href="https://comune.cento.fe.it">Comune di Cento</a> (presso la sede della Polizia Locale) da <a href="https://lepida.it">Lepida S.c.p.A.</a> nell'ambito del progetto <a href="https://retepaiot.it">RetePAIOT</a> della <a href="https://www.regione.emilia-romagna.it/">Regione Emilia-Romagna</a>.<br/>
           <i>Il codice sorgente di questa pagina è all'indirizzo <a href="https://github.com/ComuneDiCento/StazioneMeteoCento">https://github.com/ComuneDiCento/StazioneMeteoCento</a>.</i>
         </p>
       </Row>
-
 
       {error && <Alert color="danger">{error}</Alert>}
 
@@ -238,7 +250,7 @@ const WeatherDashboard = () => {
           ))}
         </Col>
       </Row>
-      </div>
+    </div>
   );
 };
 

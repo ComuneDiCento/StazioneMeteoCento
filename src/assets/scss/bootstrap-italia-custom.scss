@@ -17,3 +17,10 @@
 .it-footer-smallprint {
   background-color: rgb(57, 57, 57) !important;
 }
+
+.it-header-wrapper.it-header-sticky {
+  position: sticky;
+  top: 0;
+  z-index: 1000;    /* o un valore più alto se serve */
+  background: white;/* evita sovrapposizioni trasparenti */
+}
