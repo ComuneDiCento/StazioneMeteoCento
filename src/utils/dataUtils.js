@@ -18,7 +18,8 @@ export const getLastNDates = (n = 3) => {
 
 // Scarica dati storici da una lista di sensori negli ultimi N ore
 export const fetchHistoricalData = async (sensorObjects, hours = 48) => {
-  const days = getLastNDates(Math.ceil(hours / 24));
+  const requiredDays = Math.ceil((hours + new Date().getHours()) / 24);
+  const days = getLastNDates(requiredDays);
   const data = await Promise.all(sensorObjects.map(async obj => {
     const raw = await Promise.all(days.map(date =>
       fetch(`${API_BASE_URL}/getMeasureRealTimeData/${obj.id}/${date}`).then(r => r.json())

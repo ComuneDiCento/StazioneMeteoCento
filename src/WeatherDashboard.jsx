@@ -134,7 +134,7 @@ const WeatherDashboard = () => {
     refresh();
     const iv = setInterval(refresh, intervalMs);
     return () => clearInterval(iv);
-  }, [intervalMs, historyHours]); // refresh non serve nelle dipendenze perché lo definisci inline
+  }, [intervalMs, historyHours]); 
 
   const formatChartData = (sets, idxs = sets.map((_, i) => i), param) => {
     if (!sets.length) return { xAxis: [], series: [] };
