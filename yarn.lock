@@ -3836,6 +3836,11 @@ safe-buffer@~5.1.0, safe-buffer@~5.1.1:
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
 
+sass-package-importer@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/sass-package-importer/-/sass-package-importer-1.0.0.tgz#7437a8f1351807d790fcb0fc9e2125ff5dcff3a7"
+  integrity sha512-ibWzE3bftWaiXsL7ohWA/7S2kT4hSpXnoHiui4qqkCwCjtomg3gGZpvtP6pzhtA9vxOEBbmKodAAeyM2ItxTEw==
+
 sass@*:
   version "1.89.2"
   resolved "https://registry.yarnpkg.com/sass/-/sass-1.89.2.tgz#a771716aeae774e2b529f72c0ff2dfd46c9de10e"
@@ -4317,10 +4322,10 @@ videojs-vtt.js@0.15.5:
   dependencies:
     global "^4.3.1"
 
-vite@^7.0.0:
-  version "7.0.1"
-  resolved "https://registry.yarnpkg.com/vite/-/vite-7.0.1.tgz#b7ebb1e8a7d7f0f42867a545561fb72b34b2b13f"
-  integrity sha512-BiKOQoW5HGR30E6JDeNsati6HnSPMVEKbkIWbCiol+xKeu3g5owrjy7kbk/QEMuzCV87dSUTvycYKmlcfGKq3Q==
+vite@^7.0.3:
+  version "7.0.3"
+  resolved "https://registry.yarnpkg.com/vite/-/vite-7.0.3.tgz#3bf15e1a6d054960406a70fa1052043938b39c5a"
+  integrity sha512-y2L5oJZF7bj4c0jgGYgBNSdIu+5HF+m68rn2cQXFbGoShdhV1phX9rbnxy9YXj82aS8MMsCLAAFkRxZeWdldrQ==
   dependencies:
     esbuild "^0.25.0"
     fdir "^6.4.6"
