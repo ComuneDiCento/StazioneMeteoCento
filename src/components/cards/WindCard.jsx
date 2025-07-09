@@ -43,7 +43,7 @@ const WindCard = ({ param, data, fmtTime, lastUpd }) => {
   const rafLast = entryRaf?.data.at(-1);
 
   const items = [
-    medLast && { label: 'Media', formatted: `${parseFloat(medLast.value).toFixed(1)} ${entryMedia.measure.descrizione_unita_misura}`, time: medLast.timestamp || medLast.timedate },
+    medLast && { label: 'Più recente', formatted: `${parseFloat(medLast.value).toFixed(1)} ${entryMedia.measure.descrizione_unita_misura}`, time: medLast.timestamp || medLast.timedate },
     maxExtreme && { label: 'Massima (periodo)', formatted: `${maxExtreme.value.toFixed(1)} ${entryMax.measure.descrizione_unita_misura}`, time: maxExtreme.time },
     minExtreme && { label: 'Minima (periodo)', formatted: `${minExtreme.value.toFixed(1)} ${entryMin.measure.descrizione_unita_misura}`, time: minExtreme.time },
     dirLast && { label: 'Direzione', formatted: getWindDir(parseFloat(dirLast.value)), time: dirLast.timestamp || dirLast.timedate },
@@ -128,10 +128,6 @@ const WindCard = ({ param, data, fmtTime, lastUpd }) => {
         <Row>
           {plotVelocity.length > 0 && (
             <Plot key={`${plotKey}-velocity`} data={plotVelocity} layout={{ height: 250, margin: { t: 30, r: 10, b: 40, l: 40 }, xaxis: { title: 'Orario', type: 'date', tickformat: '%d/%m<br>%H:%M' }, yaxis: { title: entryMedia?.measure?.descrizione_unita_misura || 'm/s', autorange: true }, legend: { orientation: 'h', x: 0.5, y: -0.3, xanchor: 'center', yanchor: 'top' } }} config={{ displayModeBar: false, responsive: true, staticPlot: true }} style={{ width: '100%' }} />
-          )}
-
-          {plotDirection.length > 0 && (
-            <Plot key={`${plotKey}-direction`} data={plotDirection} layout={{ height: 200, margin: { t: 40, b: 40, l: 40, r: 10 }, xaxis: { title: 'Orario', type: 'date', tickformat: '%d/%m<br>%H:%M' }, yaxis: { title: 'Gradi', autorange: true }, legend: { orientation: 'h', x: 0.5, y: -0.3, xanchor: 'center', yanchor: 'top' } }} config={{ displayModeBar: false, responsive: true, staticPlot: true }} style={{ width: '100%' }} />
           )}
 
           <Plot key={`${plotKey}-rose`} data={windRoseData} layout={{ title: { text: 'Rosa dei venti (raffiche)', font: { size: 16 } }, polar: { angularaxis: { rotation: 90, direction: 'clockwise', tickmode: 'array', tickvals: [0, 45, 90, 135, 180, 225, 270, 315], ticktext: ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'] }, radialaxis: { ticksuffix: '', angle: 90, showline: false } }, showlegend: true, legend: { orientation: 'v', x: 0.95, y: 0.5 }, margin: { t: 60, b: 20, l: 20, r: 150 }, height: 400 }} config={{ displayModeBar: false, responsive: true, staticPlot: true }} style={{ width: '100%' }} />

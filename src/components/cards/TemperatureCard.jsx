@@ -22,7 +22,7 @@ const TemperatureCard = ({ param, data, lastUpd, fmtTime }) => {
   if (baseTemp?.data?.length) {
     const last = baseTemp.data[baseTemp.data.length - 1];
     vals.push({
-      label: 'Media',
+      label: 'Più recente',
       value: parseFloat(last.value),
       unit: baseTemp.measure.descrizione_unita_misura,
       time: last.timestamp || last.timedate
@@ -35,7 +35,7 @@ const TemperatureCard = ({ param, data, lastUpd, fmtTime }) => {
     const index = maxValues.indexOf(max);
     const time = maxTemp.data[index]?.timestamp || maxTemp.data[index]?.timedate;
     vals.push({
-      label: 'Massima',
+      label: 'Massima (periodo)',
       value: max,
       unit: maxTemp.measure.descrizione_unita_misura,
       time
@@ -48,7 +48,7 @@ const TemperatureCard = ({ param, data, lastUpd, fmtTime }) => {
     const index = minValues.indexOf(min);
     const time = minTemp.data[index]?.timestamp || minTemp.data[index]?.timedate;
     vals.push({
-      label: 'Minima',
+      label: 'Minima (periodo)',
       value: min,
       unit: minTemp.measure.descrizione_unita_misura,
       time

@@ -8,8 +8,8 @@ export const CenterHeader: FC<Props> = ({ props }) => {
 		<Header type="center" theme={props?.theme}>
 			<HeaderContent>
 				<HeaderBrand iconName="stemma.png" iconAlt={"Stemma del Comune di Cento"}>
-					<h2>Comune di Cento</h2>
-					<p>Stazione Meteo - Comune di Cento</p>
+					<div><h2>Comune di Cento</h2>
+					<p>Stazione Meteo</p></div>
 				</HeaderBrand>
 				<HeaderRightZone>
 					<HeaderSocialsZone label="Seguici su">

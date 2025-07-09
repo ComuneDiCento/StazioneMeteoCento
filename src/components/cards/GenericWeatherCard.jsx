@@ -71,7 +71,7 @@ const GenericWeatherCard = ({ param, data, fmtTime, lastUpd }) => {
             <React.Fragment key={i}>
               <Col sm={4} className="mb-3">
                 <h5>{v.current.value.toFixed(1)} {v.unit}</h5>
-                <small className="text-secondary d-block">{v.label}</small>
+                <small className="text-secondary d-block">Più recente</small>
                 <small className="text-muted">
                   {(toRomeDate(v.current.time) || lastUpd)?.toLocaleString('it-IT', { timeZone: 'Europe/Rome', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}
                 </small>
@@ -79,7 +79,7 @@ const GenericWeatherCard = ({ param, data, fmtTime, lastUpd }) => {
 
               <Col sm={4} className="mb-3">
                 <h5>{v.max?.value.toFixed(1)} {v.unit}</h5>
-                <small className="text-secondary d-block">Massima</small>
+                <small className="text-secondary d-block">Massima (periodo)</small>
                 <small className="text-muted">
                   {(toRomeDate(v.max?.time) || lastUpd)?.toLocaleString('it-IT', { timeZone: 'Europe/Rome', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}
                 </small>
@@ -87,7 +87,7 @@ const GenericWeatherCard = ({ param, data, fmtTime, lastUpd }) => {
 
               <Col sm={4} className="mb-3">
                 <h5>{v.min?.value.toFixed(1)} {v.unit}</h5>
-                <small className="text-secondary d-block">Minima</small>
+                <small className="text-secondary d-block">Minima (periodo)</small>
                 <small className="text-muted">
                   {(toRomeDate(v.min?.time) || lastUpd)?.toLocaleString('it-IT', { timeZone: 'Europe/Rome', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}
                 </small>

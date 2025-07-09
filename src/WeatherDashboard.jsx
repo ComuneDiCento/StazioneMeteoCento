@@ -153,7 +153,7 @@ const WeatherDashboard = () => {
         {/* Colonna per il titolo */}
         <Col xs="auto">
           <h1 className="it-heading-xl mb-0">
-            Stazione Meteo - Comune di Cento (Ultime {historyHours}h)
+            Stazione Meteo (Ultime {historyHours}h)
           </h1>
         </Col>
 
