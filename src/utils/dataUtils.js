@@ -20,18 +20,37 @@ export const getLastNDates = (n = 3) => {
 export const fetchHistoricalData = async (sensorObjects, hours = 48) => {
   const requiredDays = Math.ceil((hours + new Date().getHours()) / 24);
   const days = getLastNDates(requiredDays);
+
   const data = await Promise.all(sensorObjects.map(async obj => {
+    // 1) fetch dei dati raw
     const raw = await Promise.all(days.map(date =>
-      fetch(`${API_BASE_URL}/getMeasureRealTimeData/${obj.id}/${date}`).then(r => r.json())
+      fetch(`${API_BASE_URL}/getMeasureRealTimeData/${obj.id}/${date}`)
+        .then(r => r.json())
     ));
+
+    // 2) flatten, filter su window oraria e sort per data
     const combined = raw.flat()
       .map(d => ({ ...d, date: toRomeDate(d.timestamp || d.timedate) }))
       .filter(d => d.date && Date.now() - d.date.getTime() <= hours * 3600 * 1000)
       .sort((a, b) => a.date - b.date);
-    return { measure: obj, data: combined };
+
+    // 3) qui schiaccio obj.measure nel livello superiore
+    const flatMeasure = {
+      id: obj.id,
+      key: obj.key,
+      // spread delle proprietà custom (es. descrizione_unita_misura)
+      ...obj.measure
+    };
+
+    return {
+      measure: flatMeasure,
+      data: combined
+    };
   }));
+
   return data;
 };
+
 
 // Calcola min/max di un dato storico per un certo key
 export const getMinMaxForKey = (histArray, key) => {

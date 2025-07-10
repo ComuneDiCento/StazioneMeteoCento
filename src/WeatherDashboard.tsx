@@ -51,10 +51,10 @@ const weatherParameters = [
   },
   {
     icon: <Sun />, label: 'Radiazione',
-    keys: ['RADIAZIONE', 'RADIAZIONE MAX'],
+    keys: ['RADIAZIONE_SOLARE_MAX'],
     keyLabels: {
-      RADIAZIONE: 'Radiazione',
-      'RADIAZIONE MAX': 'Rad. massima'
+      'RADIAZIONE_SOLARE': 'Radiazione',
+      'RADIAZIONE_SOLARE_MAX': 'Rad. massima'
     },
     chartColors: ['#FFC107', '#FFD54F'], color: '#FFC107'
   },
@@ -124,6 +124,7 @@ const WeatherDashboard: FC<WeatherDashboardProps> = ({
         const sensors = p.keys
           .map(k => {
             const mm = allMeasures.find(x => x.descrizione.toUpperCase().includes(k));
+            console.log("k",k,"mm",mm);
             return mm ? { id: mm.id_misura, key: k, measure: { key: k, descrizione_unita_misura: mm.descrizione_unita_misura } } : null;
           })
           .filter(Boolean) as any[];

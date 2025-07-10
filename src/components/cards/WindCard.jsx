@@ -42,6 +42,7 @@ const WindCard = ({ param, data, fmtTime, lastUpd }) => {
   const dirLast = entryDir?.data.at(-1);
   const rafLast = entryRaf?.data.at(-1);
 
+  console.log("entryMedia",entryMedia);
   const items = [
     medLast && { label: 'Più recente', formatted: `${parseFloat(medLast.value).toFixed(1)} ${entryMedia.measure.descrizione_unita_misura}`, time: medLast.timestamp || medLast.timedate },
     maxExtreme && { label: 'Massima (periodo)', formatted: `${maxExtreme.value.toFixed(1)} ${entryMax.measure.descrizione_unita_misura}`, time: maxExtreme.time },
