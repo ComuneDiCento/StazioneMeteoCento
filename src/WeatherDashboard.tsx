@@ -65,7 +65,7 @@ const weatherParameters = [
       'PIOGGIA CUMULATA': 'Cumulata',
       'PIOGGIA INCREMENTALE': 'Incrementale'
     },
-    chartColors: ['#4CAF50', '#81C784'], color: '#4CAF50'
+    chartColors: ['#3333ff', '#81C784'], color: '#4CAF50'
   }
 ];
 
