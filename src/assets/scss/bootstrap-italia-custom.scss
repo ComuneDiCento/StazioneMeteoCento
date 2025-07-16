@@ -1,0 +1,26 @@
+// file: bootstrap-italia-custom.scss
+
+// import libreria
+@import 'bootstrap-italia/src/scss/bootstrap-italia';
+
+// Override header slim, central e nav
+.it-header-slim-wrapper { 
+    background-color: rgb(133, 56, 0) !important;
+}
+
+.it-header-center-wrapper,
+.it-header-navbar-wrapper {
+  background-color: rgb(191, 80, 0) !important;
+}
+
+.it-footer-main,
+.it-footer-smallprint {
+  background-color: rgb(57, 57, 57) !important;
+}
+
+.it-header-wrapper.it-header-sticky {
+  position: sticky;
+  top: 0;
+  z-index: 1000;    /* o un valore più alto se serve */
+  background: white;/* evita sovrapposizioni trasparenti */
+}

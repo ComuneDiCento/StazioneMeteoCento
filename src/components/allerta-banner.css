@@ -1,0 +1,70 @@
+.bg-orange {
+  background-color: #fd7e14 !important;
+}
+
+.border-orange {
+  border-color: #fd7e14 !important;
+}
+
+.badge-orange {
+  background-color: #fd7e14;
+  color: #fff;
+}
+
+
+
+
+.allertameteo-verde {
+  background-color: green;
+  color: #ffffff; /* testo scuro per contrasto */
+}
+
+.allertameteo-giallo {
+  background-color: #FFFF00;
+  color: #000000; /* testo scuro per contrasto */
+}
+
+.allertameteo-arancio {
+  background-color: #ff6700;
+  color: #000000;
+}
+
+.allertameteo-rosso {
+  background-color: #e30000; 
+  color: #fff;
+}
+
+
+/* Badge standard (verde, giallo, rosso) */
+.badgemeteo-verde {
+  background-color: green;
+  color: #fff;
+}
+
+.badgemeteo-giallo {
+  background-color: #FFFF00;
+  color: #000000;
+}
+
+.badgemeteo-rosso {
+  background-color: #e30000; 
+  color: #fff;
+}
+
+.badgemeteo-arancio {
+  background-color: #ff6700;
+  color: #000000;
+}
+
+/* Opzionale: migliora visibilità badge */
+.badge {
+  display: inline-block;
+  padding: 0.35em 0.6em;
+  font-weight: 600;
+  font-size: 0.65rem;
+  border-radius: 0.25rem;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+}
