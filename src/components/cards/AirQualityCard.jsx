@@ -69,17 +69,13 @@ const AirQualityCard = ({ param, data = [], lastUpd }) => {
                 <Row className="mb-3">
                     {latestValues.map((d, i) => (
                         <Col sm={6} className="mb-3" key={i}>
-                            <h5 className={(() => {
-                                        const threshold = thresholdMap[d.key];
-                                        if (threshold === undefined || d.key.startsWith('superamenti_')) return 'transparent';
-                                        return d.value > threshold ? 'text-black' : 'text-white';
-                                    })()}
+                            <h5 className="text-white"
 
                                 style={{
                                     backgroundColor: (() => {
                                         const threshold = thresholdMap[d.key];
                                         if (threshold === undefined || d.key.startsWith('superamenti_')) return 'transparent';
-                                        return d.value > threshold ? 'ff6700' : 'green';
+                                        return d.value > threshold ? '#ff6700' : 'green';
                                     })(),
                                     padding: '4px 8px',
                                     borderRadius: '4px',

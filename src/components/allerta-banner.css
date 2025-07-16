@@ -26,7 +26,7 @@
 
 .allertameteo-arancio {
   background-color: #ff6700;
-  color: #000000;
+  color: #fff;
 }
 
 .allertameteo-rosso {
@@ -53,7 +53,7 @@
 
 .badgemeteo-arancio {
   background-color: #ff6700;
-  color: #000000;
+  color: #fff;
 }
 
 /* Opzionale: migliora visibilità badge */
