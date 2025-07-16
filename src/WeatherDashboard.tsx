@@ -55,7 +55,7 @@ const weatherParameters = [
   },
   {
     icon: <Sun />, label: 'Radiazione',
-    keys: ['RADIAZIONE_SOLARE_MAX'],
+    keys: ['RADIAZIONE_SOLARE'],
     keyLabels: {
       'RADIAZIONE_SOLARE': 'Radiazione',
       'RADIAZIONE_SOLARE_MAX': 'Rad. massima'
