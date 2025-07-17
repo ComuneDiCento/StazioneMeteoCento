@@ -1,12 +1,5 @@
-# React + Vite
+# Stazione Meteo di Cento
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Dati provenienti dalla stazione meteo installata nel [Comune di Cento](https://comune.cento.fe.it/) (presso la sede della Polizia Locale) da [Lepida S.c.p.A.](https://lepida.it/), nell'ambito del progetto [RetePAIOT](https://retepaiot.it/) della [Regione Emilia-Romagna](https://www.regione.emilia-romagna.it/).
+I dati di qualità dell'aria ARPAE sono prelevati dalla [mappa delle stazioni fisse](https://www.arpae.it/it/temi-ambientali/aria/dati-qualita-aria/stazioni-fisse) per la stazione di Cento (Parco del Reno).
+I dati di allerta meteo sono prelevati dal [sito istituzionale del Comune di Cento](https://www.comune.cento.fe.it/).
