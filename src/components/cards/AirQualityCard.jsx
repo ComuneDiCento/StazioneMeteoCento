@@ -136,11 +136,13 @@ const AirQualityCard = ({ param, data = [], lastUpd }) => {
                                     xaxis: {
                                         title: 'Data',
                                         tickformat: '%d/%m<br>%H:%M',
-                                        type: 'date'
+                                        type: 'date',
+                                        fixedrange: true
                                     },
                                     yaxis: {
                                         title: 'µg/m³',
-                                        autorange: true
+                                        autorange: true,
+                                        fixedrange: true
                                     },
                                     legend: {
                                         orientation: 'h',
@@ -169,7 +171,7 @@ const AirQualityCard = ({ param, data = [], lastUpd }) => {
                                         }).filter(Boolean)
                                     ]
                                 }}
-                                config={{ displayModeBar: false, responsive: true, staticPlot: true }}
+                                config={{ displayModeBar: false, responsive: true, scrollZoom: false, doubleClick: false, displaylogo: false, modeBarButtonsToRemove: ['zoom2d', 'pan2d', 'select2d', 'lasso2d', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d'] }}
                                 style={{ width: '100%' }}
                             />
                         </div>
@@ -206,11 +208,13 @@ const AirQualityCard = ({ param, data = [], lastUpd }) => {
                                         xaxis: {
                                             title: 'Data',
                                             tickformat: '%d/%m<br>%H:%M',
-                                            type: 'date'
+                                            type: 'date',
+                                            fixedrange: true
                                         },
                                         yaxis: {
                                             title: `${val.unit}`,
-                                            autorange: true
+                                            autorange: true,
+                                            fixedrange: true
                                         },
                                         showlegend: false,
                                         shapes: thresholdMap[val.key]
@@ -229,7 +233,7 @@ const AirQualityCard = ({ param, data = [], lastUpd }) => {
                                             }]
                                             : []
                                     }}
-                                    config={{ displayModeBar: false, responsive: true, staticPlot: true }}
+                                    config={{ displayModeBar: false, responsive: true, scrollZoom: false, doubleClick: false, displaylogo: false, modeBarButtonsToRemove: ['zoom2d', 'pan2d', 'select2d', 'lasso2d', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d'] }}
                                     style={{ width: '100%' }}
                                 />
                             </div>

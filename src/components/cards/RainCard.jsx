@@ -107,12 +107,14 @@ const RainCard = ({ param, data, lastUpd }) => {
                   title: 'Orario',
                   type: 'date',
                   tickformat: '%d/%m<br>%H:%M',
-                  automargin: true
+                  automargin: true,
+                  fixedrange: true
                 },
                 yaxis: {
                   title: values[0]?.unit || 'mm',
                   autorange: true,
-                  rangemode: 'tozero'
+                  rangemode: 'tozero',
+                  fixedrange: true
                 },
                 legend: {
                   orientation: 'h',
@@ -121,7 +123,7 @@ const RainCard = ({ param, data, lastUpd }) => {
                   y: -0.3
                 }
               }}
-              config={{ displayModeBar: false, responsive: true, staticPlot: true }}
+              config={{ displayModeBar: false, responsive: true, scrollZoom: false, doubleClick: false, displaylogo: false, modeBarButtonsToRemove: ['zoom2d', 'pan2d', 'select2d', 'lasso2d', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d'] }}
               style={{ width: '100%' }}
             />
           )}

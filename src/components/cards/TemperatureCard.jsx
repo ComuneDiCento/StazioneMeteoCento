@@ -114,15 +114,17 @@ const TemperatureCard = ({ param, data, lastUpd, fmtTime }) => {
                 xaxis: {
                   title: 'Orario',
                   tickformat: '%d/%m<br>%H:%M',
-                  type: 'date'
+                  type: 'date',
+                  fixedrange: true
                 },
                 yaxis: {
                   title: baseTemp?.measure?.descrizione_unita_misura || '°C',
-                  autorange: true
+                  autorange: true,
+                  fixedrange: true
                 },
                 legend: { orientation: 'h', x: 0.5, y: -0.3, xanchor: 'center', yanchor: 'top' }
               }}
-              config={{ displayModeBar: false, responsive: true, staticPlot: true }}
+              config={{ displayModeBar: false, responsive: true, scrollZoom: false, doubleClick: false, displaylogo: false, modeBarButtonsToRemove: ['zoom2d', 'pan2d', 'select2d', 'lasso2d', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d'] }}
               style={{ width: '100%' }}
             />
           )}

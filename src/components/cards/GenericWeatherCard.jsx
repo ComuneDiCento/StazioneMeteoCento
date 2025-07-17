@@ -106,11 +106,11 @@ const GenericWeatherCard = ({ param, data, fmtTime, lastUpd }) => {
               layout={{
                 height: 240,
                 margin: { t: 10, r: 10, b: 40, l: 40 },
-                xaxis: { title: 'Orario', tickformat: '%d/%m<br>%H:%M', type: 'date' },
-                yaxis: { title: values[0]?.unit || '', autorange: true },
+                xaxis: { title: 'Orario', tickformat: '%d/%m<br>%H:%M', type: 'date', fixedrange: true },
+                yaxis: { title: values[0]?.unit || '', autorange: true, fixedrange: true },
                 legend: { orientation: 'h', x: 0.5, xanchor: 'center', y: -0.3 },
               }}
-              config={{ displayModeBar: false, responsive: true, staticPlot: true }}
+              config={{ displayModeBar: false, responsive: true, scrollZoom: false, doubleClick: false, displaylogo: false, modeBarButtonsToRemove: ['zoom2d', 'pan2d', 'select2d', 'lasso2d', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d'] }}
               style={{ width: '100%' }}
             />
           )}
