@@ -67,19 +67,19 @@ const WindCard = ({ param, data, fmtTime, lastUpd }) => {
 
   const windRoseData = (() => {
     const speedRanges = [
-      { min: 0.0, max: 0.2, color: '#00e676', label: 'Bf 0' },
-      { min: 0.3, max: 1.5, color: '#66eb6e', label: 'Bf 1' },
-      { min: 1.6, max: 3.3, color: '#c6ea4b', label: 'Bf 2' },
-      { min: 3.4, max: 5.4, color: '#fdd835', label: 'Bf 3' },
-      { min: 5.5, max: 7.9, color: '#ffc107', label: 'Bf 4' },
-      { min: 8.0, max: 10.7, color: '#ff9800', label: 'Bf 5' },
-      { min: 10.8, max: 13.8, color: '#ff7043', label: 'Bf 6' },
-      { min: 13.9, max: 17.1, color: '#ff5722', label: 'Bf 7' },
-      { min: 17.2, max: 20.7, color: '#f44336', label: 'Bf 8' },
-      { min: 20.8, max: 24.4, color: '#e53935', label: 'Bf 9' },
-      { min: 24.5, max: 28.4, color: '#d32f2f', label: 'Bf 10' },
-      { min: 28.5, max: 32.6, color: '#c62828', label: 'Bf 11' },
-      { min: 32.7, max: Infinity, color: '#b71c1c', label: 'Bf 12' }
+      { min: 0.0, max: 0.2, color: '#00e676', label: 'Bf 0 (0-0.2 m/s)' },
+      { min: 0.3, max: 1.5, color: '#66eb6e', label: 'Bf 1 (0.3-1.5 m/s)' },
+      { min: 1.6, max: 3.3, color: '#c6ea4b', label: 'Bf 2 (1.6-3.3 m/s)' },
+      { min: 3.4, max: 5.4, color: '#fdd835', label: 'Bf 3 (3.4-5.4 m/s)' },
+      { min: 5.5, max: 7.9, color: '#ffc107', label: 'Bf 4 (5.5-7.9 m/s)' },
+      { min: 8.0, max: 10.7, color: '#ff9800', label: 'Bf 5 (8.0-10.7 m/s)' },
+      { min: 10.8, max: 13.8, color: '#ff7043', label: 'Bf 6 (10.8-13.8 m/s)' },
+      { min: 13.9, max: 17.1, color: '#ff5722', label: 'Bf 7 (13.9-17.1 m/s)' },
+      { min: 17.2, max: 20.7, color: '#f44336', label: 'Bf 8 (17.2-20.7 m/s)' },
+      { min: 20.8, max: 24.4, color: '#e53935', label: 'Bf 9 (20.8-24.4 m/s)' },
+      { min: 24.5, max: 28.4, color: '#d32f2f', label: 'Bf 10 (24.5-28.4 m/s)' },
+      { min: 28.5, max: 32.6, color: '#c62828', label: 'Bf 11 (28.5-32.6 m/s)' },
+      { min: 32.7, max: Infinity, color: '#b71c1c', label: 'Bf 12 (>=32.7 m/s)' }
     ];
 
     const counts = speedRanges.map(() => Array(8).fill(0));
