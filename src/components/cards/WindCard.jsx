@@ -127,19 +127,34 @@ const WindCard = ({ param, data, fmtTime, lastUpd }) => {
 
         <Row>
           {plotVelocity.length > 0 && (
-            <Plot key={`${plotKey}-velocity`} data={plotVelocity} layout={{ height: 250, margin: { t: 30, r: 10, b: 40, l: 40 }, 
-            xaxis: { title: 'Orario', type: 'date', tickformat: '%d/%m<br>%H:%M', fixedrange: true }, 
-            yaxis: { title: entryMedia?.measure?.descrizione_unita_misura || 'm/s', autorange: true, fixedrange: true }, 
-            legend: { orientation: 'h', x: 0.5, y: -0.3, xanchor: 'center', yanchor: 'top' } }}
+            <Plot key={`${plotKey}-velocity`} data={plotVelocity} layout={{
+              height: 250, margin: { t: 30, r: 10, b: 40, l: 40 },
+              xaxis: { title: 'Orario', type: 'date', tickformat: '%d/%m<br>%H:%M', fixedrange: true },
+              yaxis: { title: entryMedia?.measure?.descrizione_unita_misura || 'm/s', autorange: true, fixedrange: true },
+              legend: { orientation: 'h', x: 0.5, y: -0.3, xanchor: 'center', yanchor: 'top' }
+            }}
               config={{ displayModeBar: false, responsive: true, scrollZoom: false, doubleClick: false, displaylogo: false, modeBarButtonsToRemove: ['zoom2d', 'pan2d', 'select2d', 'lasso2d', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d'] }}
               style={{ width: '100%' }} />
           )}
 
-          <Plot key={`${plotKey}-rose`} data={windRoseData} layout={{ title: { text: 'Rosa dei venti (raffiche)', font: { size: 16 } }, polar: { angularaxis: { rotation: 90, direction: 'clockwise', tickmode: 'array', tickvals: [0, 45, 90, 135, 180, 225, 270, 315], ticktext: ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'], fixedrange: true }, 
-          radialaxis: { ticksuffix: '%', angle: 90, showline: false, fixedrange: true } },   dragmode: false, 
-           showlegend: true, legend: { orientation: 'v', x: 0.95, y: 0.5 }, margin: { t: 60, b: 20, l: 20, r: 150 }, height: 400 }} 
-                                config={{ displayModeBar: false, responsive: true, scrollZoom: false, doubleClick: false, displaylogo: false, modeBarButtonsToRemove: ['zoom2d', 'pan2d', 'select2d', 'lasso2d', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d'] }}
-          style={{ width: '100%' }} />
+          <Plot key={`${plotKey}-rose`} data={windRoseData} layout={{
+            title: { text: 'Rosa dei venti (raffiche)', font: { size: 16 } }, polar: {
+              angularaxis: { rotation: 90, direction: 'clockwise', tickmode: 'array', tickvals: [0, 45, 90, 135, 180, 225, 270, 315], ticktext: ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'], fixedrange: true },
+              radialaxis: { ticksuffix: '%', angle: 90, showline: false, fixedrange: true }
+            }, dragmode: false,
+            showlegend: true,
+            legend: {
+              title: {
+                text: 'Scala Beaufort del vento'
+              },
+              orientation: 'v',
+              x: 0.95,
+              y: 0.5
+            },
+            margin: { t: 60, b: 20, l: 20, r: 150 }, height: 400
+          }}
+            config={{ displayModeBar: false, responsive: true, scrollZoom: false, doubleClick: false, displaylogo: false, modeBarButtonsToRemove: ['zoom2d', 'pan2d', 'select2d', 'lasso2d', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d'] }}
+            style={{ width: '100%' }} />
         </Row>
 
       </CardBody>
